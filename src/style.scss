@@ -1,0 +1,66 @@
+$device: "_DEVICE_";
+
+.tzm-rbc-center-#{$device} {
+    text-align: center !important;
+    justify-content: center !important;
+}
+.tzm-rbc-hidden-#{$device} {
+    display: none !important;
+}
+.tzm-rbc-fullwidth-#{$device} {
+    flex-basis: 100% !important;
+
+    .wp-block-columns:has(&),
+    .wp-block-group.is-layout-flex.is-horizontal:has(&) {
+        flex-wrap: wrap !important;
+    }
+}
+.tzm-rbc-reverse-#{$device} {
+    &.wp-block-group.is-layout-flex.is-horizontal,
+    &.wp-block-columns {
+        flex-direction: row-reverse;
+    }
+    &.wp-block-group.is-layout-flex.is-vertical {
+        flex-direction: column-reverse;
+    }
+    &.wp-block-media-text {
+        &:not(.has-media-on-the-right) {
+            direction: rtl;
+        }
+        &.has-media-on-the-right {
+            direction: ltr;
+        }
+    }
+}
+
+[style*="--tzm--rbc--padding--"] {
+    padding: var(--tzm--rbc--padding--#{$device}, initial);
+}
+[style*="--tzm--rbc--padding-top--"] {
+    padding-top: var(--tzm--rbc--padding-top--#{$device}, initial);
+}
+[style*="--tzm--rbc--padding-right--"] {
+    padding-right: var(--tzm--rbc--padding-right--#{$device}, initial);
+}
+[style*="--tzm--rbc--padding-bottom--"] {
+    padding-bottom: var(--tzm--rbc--padding-bottom--#{$device}, initial);
+}
+[style*="--tzm--rbc--padding-left--"] {
+    padding-left: var(--tzm--rbc--padding-left--#{$device}, initial);
+}
+
+[style*="--tzm--rbc--margin--"] {
+    margin: var(--tzm--rbc--margin--#{$device}, initial);
+}
+[style*="--tzm--rbc--margin-top--"] {
+    margin-top: var(--tzm--rbc--margin-top--#{$device}, initial);
+}
+[style*="--tzm--rbc--margin-right--"] {
+    margin-right: var(--tzm--rbc--margin-right--#{$device}, initial);
+}
+[style*="--tzm--rbc--margin-bottom--"] {
+    margin-bottom: var(--tzm--rbc--margin-bottom--#{$device}, initial);
+}
+[style*="--tzm--rbc--margin-left--"] {
+    margin-left: var(--tzm--rbc--margin-left--#{$device}, initial);
+}
