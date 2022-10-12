@@ -317,7 +317,7 @@ const addResponsiveClassesEditor = createHigherOrderComponent( (BlockListBlock) 
 						for (const [option, value] of Object.entries(options)) {
 
 							if (option !== 'padding' && option !== 'margin' && value) {
-								classes.push('tzm-rbc-' + option.toLowerCase() + '-' + device);
+								classes.push('tzm-responsive-' + option.toLowerCase() + '-' + device);
 							}
 						}
 					}
@@ -339,11 +339,11 @@ const addResponsiveClassesEditor = createHigherOrderComponent( (BlockListBlock) 
 								if (Object.keys(value).length === 4) {
 									let isShort = (value['top'] == value['right'] && value['top'] == value['bottom'] && value['top'] == value['left']);
 									let valStr = value['top'] + ' ' + value['right'] + ' ' + value['bottom'] + ' ' + value['left'];
-									styles['--tzm--rbc--' + option + '--' + device] = isShort ? value['top'] : valStr;
+									styles['--tzm--responsive--' + option + '--' + device] = isShort ? value['top'] : valStr;
 								
 								} else {
 									for (const [dir, dirVal] of Object.entries(value)) {
-										styles['--tzm--rbc--' + option + '-' + dir + '--' + device] = dirVal;
+										styles['--tzm--responsive--' + option + '-' + dir + '--' + device] = dirVal;
 									}
 								}
 							}
@@ -388,8 +388,8 @@ const addResponsiveClassesEditor = createHigherOrderComponent( (BlockListBlock) 
 	
 	return assign( {}, props, {
 		className: classnames( 
-			className, 'tzm-rbc-test', {
-				[`tzm-rbc-${responsiveControls?.id}`]: responsiveControls && responsiveControls.id
+			className, 'tzm-responsive-test', {
+				[`tzm-responsive-${responsiveControls?.id}`]: responsiveControls && responsiveControls.id
 			}
 		)
 	} );

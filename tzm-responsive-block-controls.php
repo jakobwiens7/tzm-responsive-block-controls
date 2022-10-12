@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			0.9.0
+ * Version:			0.9.1
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
@@ -83,8 +83,8 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 $editor_assets['dependencies'],
                 $editor_assets['version']
             );
-			
-			// Script Translations
+
+            // Script Translations
             if (function_exists('wp_set_script_translations')) {
                 wp_set_script_translations(
                     'tzm-responsive-block-controls-editor',
@@ -168,7 +168,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             foreach ($responsive_controls as $device => $options) {
                 foreach ($options as $option => $value) {
                     if ($option !== 'margin' && $option !== 'padding' && $value) {
-                        $classes[] = 'tzm-rbc-' . strtolower($option) . '-' . $device;
+                        $classes[] = 'tzm-responsive-' . strtolower($option) . '-' . $device;
                     }
                 }
             }
@@ -180,10 +180,10 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                     if ($option === 'margin' || $option === 'padding') {
                         if (sizeof($value) === 4) {
                             $is_short = $value['top'] == $value['right'] && $value['top'] == $value['bottom'] && $value['top'] == $value['left'];
-                            $styles[] = '--tzm--rbc--' . $option . '--' . $device . ':' . ($is_short ? $value['top'] : implode(' ', $value));
+                            $styles[] = '--tzm--responsive--' . $option . '--' . $device . ':' . ($is_short ? $value['top'] : implode(' ', $value));
                         } else {
                             foreach ($value as $dir => $dirval) {
-                                $styles[] = '--tzm--rbc--' . $option . '-' . $dir . '--' . $device . ':' . $dirval;
+                                $styles[] = '--tzm--responsive--' . $option . '-' . $dir . '--' . $device . ':' . $dirval;
                             }
                         }
                     }

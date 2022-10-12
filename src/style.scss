@@ -1,13 +1,13 @@
 $device: "_DEVICE_";
 
-.tzm-rbc-center-#{$device} {
+.tzm-responsive-center-#{$device} {
     text-align: center !important;
     justify-content: center !important;
 }
-.tzm-rbc-hidden-#{$device} {
+.tzm-responsive-hidden-#{$device} {
     display: none !important;
 }
-.tzm-rbc-fullwidth-#{$device} {
+.tzm-responsive-fullwidth-#{$device} {
     flex-basis: 100% !important;
 
     .wp-block-columns:has(&),
@@ -15,7 +15,7 @@ $device: "_DEVICE_";
         flex-wrap: wrap !important;
     }
 }
-.tzm-rbc-reverse-#{$device} {
+.tzm-responsive-reverse-#{$device} {
     &.wp-block-group.is-layout-flex.is-horizontal {
         flex-direction: row-reverse;
     }
@@ -33,34 +33,34 @@ $device: "_DEVICE_";
     }
 }
 
-[style*="--tzm--rbc--padding--"] {
-    padding: var(--tzm--rbc--padding--#{$device}, initial) !important;
+[style*="--tzm--responsive--padding--"] {
+    padding: var(--tzm--responsive--padding--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--padding-top--"] {
-    padding-top: var(--tzm--rbc--padding-top--#{$device}, initial) !important;
+[style*="--tzm--responsive--padding-top--"] {
+    padding-top: var(--tzm--responsive--padding-top--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--padding-right--"] {
-    padding-right: var(--tzm--rbc--padding-right--#{$device}, initial) !important;
+[style*="--tzm--responsive--padding-right--"] {
+    padding-right: var(--tzm--responsive--padding-right--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--padding-bottom--"] {
-    padding-bottom: var(--tzm--rbc--padding-bottom--#{$device}, initial) !important;
+[style*="--tzm--responsive--padding-bottom--"] {
+    padding-bottom: var(--tzm--responsive--padding-bottom--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--padding-left--"] {
-    padding-left: var(--tzm--rbc--padding-left--#{$device}, initial) !important;
+[style*="--tzm--responsive--padding-left--"] {
+    padding-left: var(--tzm--responsive--padding-left--#{$device}, initial) !important;
 }
 
-[style*="--tzm--rbc--margin--"] {
-    margin: var(--tzm--rbc--margin--#{$device}, initial) !important;
+[style*="--tzm--responsive--margin--"] {
+    margin: var(--tzm--responsive--margin--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--margin-top--"] {
-    margin-top: var(--tzm--rbc--margin-top--#{$device}, initial) !important;
+[style*="--tzm--responsive--margin-top--"] {
+    margin-top: var(--tzm--responsive--margin-top--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--margin-right--"] {
-    margin-right: var(--tzm--rbc--margin-right--#{$device}, initial) !important;
+[style*="--tzm--responsive--margin-right--"] {
+    margin-right: var(--tzm--responsive--margin-right--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--margin-bottom--"] {
-    margin-bottom: var(--tzm--rbc--margin-bottom--#{$device}, initial) !important;
+[style*="--tzm--responsive--margin-bottom--"] {
+    margin-bottom: var(--tzm--responsive--margin-bottom--#{$device}, initial) !important;
 }
-[style*="--tzm--rbc--margin-left--"] {
-    margin-left: var(--tzm--rbc--margin-left--#{$device}, initial) !important;
+[style*="--tzm--responsive--margin-left--"] {
+    margin-left: var(--tzm--responsive--margin-left--#{$device}, initial) !important;
 }
