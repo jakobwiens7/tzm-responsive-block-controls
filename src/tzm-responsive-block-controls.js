@@ -123,7 +123,8 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			const isReverseBlock = (
 				(name === 'core/group' && attributes.layout?.type === 'flex') ||
 				name === 'core/columns' ||
-				name === 'core/media-text'
+				name === 'core/media-text' ||
+				name === 'core/buttons'
 			);
 
 			const units = useCustomUnits( {
@@ -195,7 +196,7 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 					{ !! isReverseBlock && (
 						<PanelRow>
 							<ToggleControl
-								label={ __('Reverse order', "tzm-responsive-block-controls") }
+								label={ __('Reverse', "tzm-responsive-block-controls") }
 								checked={ !!responsiveControls?.[device]?.reverse }
 								onChange={ (newVal) => setOption(device, 'reverse', newVal) }
 							/>

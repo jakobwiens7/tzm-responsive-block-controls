@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2022-10-10T15:43:51+00:00\n"
-"PO-Revision-Date: 2022-10-10 16:49+0000\n"
+"PO-Revision-Date: 2022-11-04 16:13+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: tzm-responsive-block-controls\n"
 "Language: de_DE_formal\n"
@@ -49,8 +49,8 @@ msgstr "Responsivität"
 
 #: dist/tzm-responsive-block-controls.js:1
 #: src/tzm-responsive-block-controls.js:198
-msgid "Reverse order"
-msgstr "Reihenfolge umkehren"
+msgid "Reverse"
+msgstr "Umkehren"
 
 #. Author of the plugin
 msgid "TezmoMedia - Jakob Wiens"

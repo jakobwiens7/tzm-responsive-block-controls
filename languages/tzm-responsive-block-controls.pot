@@ -37,7 +37,7 @@ msgstr ""
 
 #: dist/tzm-responsive-block-controls.js:1
 #: src/tzm-responsive-block-controls.js:198
-msgid "Reverse order"
+msgid "Reverse"
 msgstr ""
 
 #: dist/tzm-responsive-block-controls.js:1
