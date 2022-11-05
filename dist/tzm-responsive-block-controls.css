@@ -1,1 +1,17 @@
-.block-editor-block-inspector .block-editor-panel-responsive .responsive-controls-tab-panel .components-tab-panel__tabs-item:not(:hover){color:#666}.block-editor-block-inspector .block-editor-panel-responsive.has-active-desktop-options .responsive-controls-tab-panel .tab-desktop:not(:hover),.block-editor-block-inspector .block-editor-panel-responsive.has-active-laptop-options .responsive-controls-tab-panel .tab-laptop:not(:hover),.block-editor-block-inspector .block-editor-panel-responsive.has-active-phone-options .responsive-controls-tab-panel .tab-phone:not(:hover),.block-editor-block-inspector .block-editor-panel-responsive.has-active-tablet-options .responsive-controls-tab-panel .tab-tablet:not(:hover){color:#0a0}.block-editor-block-inspector .responsive-controls-tab-content{margin-top:15px}.block-editor-block-inspector .responsive-controls-tab-content .components-toggle-control{margin:0}
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/editor.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+.block-editor-block-inspector .block-editor-panel-responsive .responsive-controls-tab-panel .components-tab-panel__tabs-item:not(:hover) {
+  color: #666666;
+}
+.block-editor-block-inspector .block-editor-panel-responsive.has-active-phone-options .responsive-controls-tab-panel .tab-phone:not(:hover), .block-editor-block-inspector .block-editor-panel-responsive.has-active-tablet-options .responsive-controls-tab-panel .tab-tablet:not(:hover), .block-editor-block-inspector .block-editor-panel-responsive.has-active-laptop-options .responsive-controls-tab-panel .tab-laptop:not(:hover), .block-editor-block-inspector .block-editor-panel-responsive.has-active-desktop-options .responsive-controls-tab-panel .tab-desktop:not(:hover) {
+  color: #00aa00;
+}
+.block-editor-block-inspector .responsive-controls-tab-content {
+  margin-top: 15px;
+}
+.block-editor-block-inspector .responsive-controls-tab-content .components-toggle-control {
+  margin: 0;
+}
+
+/*# sourceMappingURL=tzm-responsive-block-controls.css.map*/
