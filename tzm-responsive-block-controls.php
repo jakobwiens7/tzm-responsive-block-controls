@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			0.9.3
+ * Version:			0.9.4
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
@@ -48,8 +48,21 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             // Enqueue block editor assets
             add_action('enqueue_block_editor_assets', array($this, 'enqueue_editor_assets'));
 
+            /**
+             * Workaround since it's not possible to enqueue inline css inside the site editor content iframe. Related topics:
+             * https://github.com/WordPress/gutenberg/issues/33212#issuecomment-879447803
+             * https://github.com/WordPress/gutenberg/pull/37466
+             **/
+            add_action('block_editor_settings_all', function ($settings) {
+                $settings['styles'][] = array('css' => $this->get_responsive_block_styles());
+                return $settings;
+            });
+
+            // Enqueue frontend block assets
+            add_action('wp_enqueue_scripts', array($this, 'enqueue_block_assets'));
+
             // Enqueue both frontend + editor block assets.
-            add_action('enqueue_block_assets', array($this, 'enqueue_block_assets'));
+            //add_action('enqueue_block_assets', array($this, 'enqueue_block_assets'));
         }
 
         /**
@@ -65,42 +78,12 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
         }
 
         /**
-         * Enqueue block editor assets
+         * Generate responsive block inline styles
          */
-        public function enqueue_editor_assets()
+        public function get_responsive_block_styles()
         {
-            $editor_assets = include(plugin_dir_path(__FILE__) . 'dist/tzm-responsive-block-controls.asset.php');
-
-            wp_enqueue_style(
-                'tzm-responsive-block-controls-editor',
-                plugins_url('/dist/tzm-responsive-block-controls.css', __FILE__),
-                array('wp-editor'),
-                $editor_assets['version']
-            );
-            wp_enqueue_script(
-                'tzm-responsive-block-controls-editor',
-                plugins_url('/dist/tzm-responsive-block-controls.js', __FILE__),
-                $editor_assets['dependencies'],
-                $editor_assets['version']
-            );
-
-            // Script Translations
-            if (function_exists('wp_set_script_translations')) {
-                wp_set_script_translations(
-                    'tzm-responsive-block-controls-editor',
-                    'tzm-responsive-block-controls',
-                    plugin_dir_path(__FILE__) . 'languages'
-                );
-            }
-        }
-
-        /**
-         * Enqueue both frontend + editor block assets.
-         */
-        public function enqueue_block_assets()
-        {
-            // Apply Filter to allow or prevent CSS output
-            if (!apply_filters('tzm_responsive_block_controls_output_css', true)) return;
+            // Apply Filter wether to allow or prevent CSS output
+            if (!apply_filters('tzm_responsive_block_controls_output_css', true)) return false;
 
             // Apply Filter to allow custom breakpoints
             $breakpoints = apply_filters('tzm_responsive_block_controls_breakpoints', array(
@@ -133,12 +116,69 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                     $prev_value = $value;
                 }
 
-                $new_css .= str_replace("_DEVICE_", $device, $css) . '}' /*. "\r\n"*/;
+                $new_css .= str_replace("_DEVICE_", $device, $css) . '}';
                 $i += 1;
             }
+            return $new_css;
+        }
 
-            // Enqueue the breakpoint styles
+
+        /**
+         * Enqueue block editor assets
+         */
+        public function enqueue_editor_assets()
+        {
+            $editor_assets = include(plugin_dir_path(__FILE__) . 'dist/tzm-responsive-block-controls.asset.php');
+
+            wp_enqueue_style(
+                'tzm-responsive-block-controls-editor',
+                plugins_url('/dist/tzm-responsive-block-controls.css', __FILE__),
+                array('wp-editor'),
+                $editor_assets['version']
+            );
+            wp_enqueue_script(
+                'tzm-responsive-block-controls-editor',
+                plugins_url('/dist/tzm-responsive-block-controls.js', __FILE__),
+                $editor_assets['dependencies'],
+                $editor_assets['version']
+            );
+
+            /**
+             * This is currently not possible yet. See related topics: 
+             * https://github.com/WordPress/gutenberg/issues/33212#issuecomment-879447803
+             * https://github.com/WordPress/gutenberg/pull/37466
+             */
+            /*
+            //$frontend_assets = include(plugin_dir_path(__FILE__) . 'dist/tzm-responsive-block-controls.asset.php');
+            //$new_css = $this->get_responsive_block_styles();
+
+            wp_register_style(
+                'tzm-responsive-block-controls',
+                false,
+                array('wp-editor'),
+                $frontend_assets['version'],
+            );
+            wp_add_inline_style('tzm-responsive-block-controls', $new_css);
+            add_editor_style( 'tzm-responsive-block-controls' ); // Loads everything for you in the iframe.
+            */
+
+            // Script Translations
+            if (function_exists('wp_set_script_translations')) {
+                wp_set_script_translations(
+                    'tzm-responsive-block-controls-editor',
+                    'tzm-responsive-block-controls',
+                    plugin_dir_path(__FILE__) . 'languages'
+                );
+            }
+        }
+
+        /**
+         * Enqueue both frontend + editor block assets.
+         */
+        public function enqueue_block_assets()
+        {
             $frontend_assets = include(plugin_dir_path(__FILE__) . 'dist/tzm-responsive-block-controls.asset.php');
+            $new_css = $this->get_responsive_block_styles();
 
             wp_register_style(
                 'tzm-responsive-block-controls',
@@ -192,7 +232,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             $styles = implode(';', $styles);
 
             /** 
-             * Modify the block's HTML via regular expressions until WP_HTML_Tag_Processor is available in core.
+             * Modify the block's HTML via regular expressions until WP_HTML_Tag_Processor is available in core (probably WP 6.2).
              * Learn more here: https://github.com/WordPress/gutenberg/pull/42485
              */
 
