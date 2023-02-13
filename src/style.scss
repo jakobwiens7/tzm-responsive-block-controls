@@ -4,20 +4,15 @@ $device: "_DEVICE_";
     text-align: center !important;
 
     &.is-layout-flex {
-        &:not(.is-vertical) {
+        &.is-horizontal,
+        &:not(.is-vertical),
+        &.is-horizontal.wp-block-navigation .wp-block-navigation__container {
             justify-content: center !important;
-
-            &.wp-block-navigation .wp-block-navigation__container {
-                justify-content: center !important;
-            }
         }
 
-        &.is-vertical {
+        &.is-vertical,
+        &.is-vertical.wp-block-navigation .wp-block-navigation__container {
             align-items: center !important;
-
-            &.wp-block-navigation .wp-block-navigation__container {
-                align-items: center !important;
-            }
         }
     }
     .is-layout-flex.is-vertical > & {
@@ -37,6 +32,7 @@ $device: "_DEVICE_";
     .wp-block-group.is-layout-flex.is-nowrap:has(&) {
         flex-wrap: wrap !important;
     }
+    // Button block
     .wp-block-buttons:has(&),
     &.wp-block-button .wp-block-button__link,
     &.wp-element-button {
@@ -50,6 +46,8 @@ $device: "_DEVICE_";
     &.is-layout-flex.is-vertical {
         flex-direction: column-reverse !important;
     }
+
+    // Media & Text block
     &.wp-block-media-text {
         &:not(.has-media-on-the-right) {
             direction: rtl;
@@ -58,7 +56,24 @@ $device: "_DEVICE_";
             direction: ltr;
         }
     }
+
+    // Navigation block
+    &.wp-block-navigation.is-horizontal,
+    &.wp-block-navigation .is-horizontal {
+        --navigation-layout-direction: row-reverse;
+    }
+    &.wp-block-navigation.is-vertical,
+    &.wp-block-navigation .is-vertical {
+        --navigation-layout-direction: column-reverse;
+    }
 }
+// Mobile specific styles
+/*
+.tzm-responsive-reverse-_DEVICE_.is-layout-flex:not(.wp-block-group):not(.is-not-stacked-on-mobile),
+.tzm-responsive-reverse-_DEVICE_.wp-block-navigation.is-responsive .has-modal-open .wp-block-navigation__container {
+    flex-direction: column-reverse !important;
+}
+*/
 
 [style*="--tzm--responsive--padding--#{$device}"] {
     padding: var(--tzm--responsive--padding--#{$device}) !important;

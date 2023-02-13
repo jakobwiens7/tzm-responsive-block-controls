@@ -3,13 +3,14 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			0.9.4
+ * Version:			0.9.53
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
  * License URI:		https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:		tzm-responsive-block-controls
  * Domain Path:		/languages
+ * Requires at least: 6.2
  *
  * @package	tzm
  */
@@ -54,7 +55,10 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
              * https://github.com/WordPress/gutenberg/pull/37466
              **/
             add_action('block_editor_settings_all', function ($settings) {
-                $settings['styles'][] = array('css' => $this->get_responsive_block_styles());
+                $settings['styles'][] = array(
+                    'css'            => $this->get_responsive_block_styles(),
+                    '__unstableType' => 'plugin'
+                );
                 return $settings;
             });
 
@@ -63,6 +67,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
 
             // Enqueue both frontend + editor block assets.
             //add_action('enqueue_block_assets', array($this, 'enqueue_block_assets'));
+
         }
 
         /**
@@ -90,35 +95,42 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 'phone'     => '781px',
                 'tablet'    => '1024px',
                 'laptop'    => '1366px',
-                'desktop'   => null //'1680px'
+                'desktop'   => '1680px', // for now this is will be ignored
+                'mobile'    => '1024px'   // wp block related mobile breakpoint
             ));
             $css = file_get_contents(plugins_url('/dist/style-tzm-responsive-block-controls.css', __FILE__));
             $new_css = '';
-            $prev_value = null;
-            $i = 0;
+
+            $mobile_css = '@media screen and (max-width: ' . $breakpoints['mobile'] . ') {
+.tzm-responsive-reverse-_DEVICE_.is-layout-flex:not(.wp-block-group):not(.is-not-stacked-on-mobile),
+.tzm-responsive-reverse-_DEVICE_.wp-block-navigation.is-responsive .wp-block-navigation__container {
+    flex-direction: column-reverse !important;
+}
+            }';
 
             // Prepare CSS styles
             foreach ($breakpoints as $device => $value) {
                 if (!$device) break;
+                if ($device == 'mobile') continue;
 
-                // First breakpoint (max-width)
-                if ($i === 0) {
-                    $new_css .= '@media screen and (max-width: ' . $value . ') {';
-                    $prev_value = $value;
-                }
-                // Last breakpoint if no value is given (min-width)
-                elseif ($i === count($breakpoints) - 1 && !$value) {
-                    $new_css .= '@media screen and (min-width: calc(' . $prev_value . ' + 1px)) { ';
-                }
-                // Every other breakpoint (between min-width and max-width)
-                else {
-                    $new_css .= '@media screen and (min-width: calc(' . $prev_value . ' + 1px)) and (max-width: ' . $value . ') {';
-                    $prev_value = $value;
+                if ($device == 'phone') {
+                    $new_css .= '@media screen and (max-width: ' . $breakpoints['phone'] . ') {';
+                } elseif ($device == 'tablet') {
+                    $new_css .= '@media screen and (min-width: calc(' . $breakpoints['phone'] . ' + 1px)) and (max-width: ' . $breakpoints['tablet'] . ') {';
+                } elseif ($device == 'laptop') {
+                    $new_css .= '@media screen and (min-width: calc(' . $breakpoints['tablet'] . ' + 1px)) and (max-width: ' . $breakpoints['laptop'] . ') {';
+                } elseif ($device == 'desktop') {
+                    $new_css .= '@media screen and (min-width: calc(' . $breakpoints['laptop'] . ' + 1px)) {';
                 }
 
                 $new_css .= str_replace("_DEVICE_", $device, $css) . '}';
-                $i += 1;
+
+                // Add mobile breakpoint styles
+                if (intval($value) <= intval($breakpoints['mobile'])) {
+                    $new_css .= str_replace("_DEVICE_", $device, $mobile_css);
+                }
             }
+
             return $new_css;
         }
 
@@ -149,8 +161,8 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
              * https://github.com/WordPress/gutenberg/pull/37466
              */
             /*
-            //$frontend_assets = include(plugin_dir_path(__FILE__) . 'dist/tzm-responsive-block-controls.asset.php');
-            //$new_css = $this->get_responsive_block_styles();
+            $frontend_assets = include(plugin_dir_path(__FILE__) . 'dist/tzm-responsive-block-controls.asset.php');
+            $new_css = $this->get_responsive_block_styles();
 
             wp_register_style(
                 'tzm-responsive-block-controls',
@@ -159,7 +171,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 $frontend_assets['version'],
             );
             wp_add_inline_style('tzm-responsive-block-controls', $new_css);
-            add_editor_style( 'tzm-responsive-block-controls' ); // Loads everything for you in the iframe.
+            add_editor_style('tzm-responsive-block-controls'); // Loads everything for you in the iframe.
             */
 
             // Script Translations
@@ -173,7 +185,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
         }
 
         /**
-         * Enqueue both frontend + editor block assets.
+         * Enqueue block frontend assets.
          */
         public function enqueue_block_assets()
         {
@@ -184,11 +196,12 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 'tzm-responsive-block-controls',
                 false,
                 is_admin() ? array('wp-editor') : array(),
-                $frontend_assets['version'],
+                $frontend_assets['version']
             );
             wp_enqueue_style('tzm-responsive-block-controls');
             wp_add_inline_style('tzm-responsive-block-controls', $new_css);
         }
+
 
         /**
          * Render block
@@ -202,7 +215,6 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             $responsive_controls = $block['attrs']['responsiveControls'];
             $classes = [];
             $styles = [];
-
 
             // Collect classes
             foreach ($responsive_controls as $device => $options) {
@@ -232,67 +244,26 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             $styles = implode(';', $styles);
 
             /** 
-             * Modify the block's HTML via regular expressions until WP_HTML_Tag_Processor is available in core (probably WP 6.2).
+             * WARNING !!! This currently requires Gutenberg plugin until available in core (probably WP 6.2) !!!
+             * Modify the block's HTML attributes via WP_HTML_Tag_Processor.
              * Learn more here: https://github.com/WordPress/gutenberg/pull/42485
              */
 
+            $html = new WP_HTML_Tag_Processor($block_content);
+            $html->next_tag();
+
             // Replace classes
             if ($classes) {
-                // ...if there is no class attribute
-                if (!str_contains($block_content, 'class')) {
-                    $block_content = preg_replace(
-                        '/>/',
-                        ' class="">',
-                        $block_content,
-                        1
-                    );
-                }
-                // ...if class attribute is null
-                elseif (!str_contains($block_content, 'class=')) {
-                    $block_content = preg_replace(
-                        '/class/',
-                        'class=""',
-                        $block_content,
-                        1
-                    );
-                }
-                $block_content = preg_replace(
-                    '/' . preg_quote('class="', '/') . '/',
-                    'class="' . $classes . ' ',
-                    $block_content,
-                    1
-                );
+                $html->add_class($classes);
             }
 
             // Replace styles
             if ($styles) {
-                // ...if there is no style attribute
-                if (!str_contains($block_content, ' style')) {
-                    $block_content = preg_replace(
-                        '/>/',
-                        ' style="">',
-                        $block_content,
-                        1
-                    );
-                }
-                // ...if style attribute is null
-                elseif (!str_contains($block_content, ' style=')) {
-                    $block_content = preg_replace(
-                        '/style/',
-                        'style=""',
-                        $block_content,
-                        1
-                    );
-                }
-                $block_content = preg_replace(
-                    '/' . preg_quote('style="', '/') . '/',
-                    'style="' . $styles . ';',
-                    $block_content,
-                    1
-                );
+                $html_style = $html->get_attribute('style');
+                $html->set_attribute('style', $html_style ? $html_style . ' ' . $styles : $styles);
             }
 
-            return $block_content;
+            return $html->get_updated_html();
         }
     }
 

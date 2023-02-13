@@ -122,6 +122,7 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 
 			const isReverseBlock = (
 				(name === 'core/group' && attributes.layout?.type === 'flex') ||
+				name === 'core/navigation' ||
 				name === 'core/columns' ||
 				name === 'core/media-text' ||
 				name === 'core/buttons'

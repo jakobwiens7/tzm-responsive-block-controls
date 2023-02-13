@@ -38,7 +38,7 @@ function override_responsive_block_controls_breakpoints( $breakpoints ) {
 	$breakpoints['phone'] 	= '781px';
 	$breakpoints['tablet'] 	= '1024px';
 	$breakpoints['laptop'] 	= '1366px';
-	
+	$breakpoints['mobile'] 	= '781px';
 	return $breakpoints;
 }
 add_filter('tzm_responsive_block_controls_breakpoints', 'override_responsive_block_controls_breakpoints');
@@ -63,5 +63,5 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
-= 0.9.0 =
+= 0.9.4 =
 * Release
