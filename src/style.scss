@@ -6,7 +6,7 @@ $device: "_DEVICE_";
     &.is-layout-flex {
         &.is-horizontal,
         &:not(.is-vertical),
-        &.is-horizontal.wp-block-navigation .wp-block-navigation__container {
+        &:not(.is-vertical).wp-block-navigation .wp-block-navigation__container {
             justify-content: center !important;
         }
 
