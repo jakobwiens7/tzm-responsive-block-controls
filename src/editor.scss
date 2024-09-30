@@ -1,20 +1,50 @@
-.block-editor-block-inspector {
-    .block-editor-panel-responsive {
-        .responsive-controls-tab-panel .components-tab-panel__tabs-item:not(:hover) {
-            color: #666666;
-        }
-        &.has-active-phone-options .responsive-controls-tab-panel .tab-phone:not(:hover),
-        &.has-active-tablet-options .responsive-controls-tab-panel .tab-tablet:not(:hover),
-        &.has-active-laptop-options .responsive-controls-tab-panel .tab-laptop:not(:hover),
-        &.has-active-desktop-options .responsive-controls-tab-panel .tab-desktop:not(:hover) {
-            color: #00aa00;
-        }
+.block-editor-block-inspector .block-editor-panel-responsive {
+    .components-tab-panel__tabs {
+        justify-content: space-evenly;
+    }
+    .responsive-controls-tab-panel .components-tab-panel__tabs-item:not(:hover) {
+        color: #666666;
+    }
+    &.has-active-phone-options .responsive-controls-tab-panel .tab-phone:not(:hover),
+    &.has-active-tablet-options .responsive-controls-tab-panel .tab-tablet:not(:hover),
+    &.has-active-laptop-options .responsive-controls-tab-panel .tab-laptop:not(:hover),
+    &.has-active-desktop-options .responsive-controls-tab-panel .tab-desktop:not(:hover) {
+        color: #00aa00;
     }
     .responsive-controls-tab-content {
         margin-top: 15px;
 
-        .components-toggle-control {
-            margin: 0;
+        .components-tools-panel {
+            padding-inline: 0;
+            margin-bottom: 10px;
         }
+        .components-tools-panel-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .components-base-control__label {
+        width: 100%;
+        margin-block: 5px;
+    }
+
+    .components-toggle-control {
+        margin-block: 5px;
+    }
+
+    [id^="inspector-box-control"].components-grid,
+    #responsive-block-gap-control {
+        width: 100%;
+        margin-bottom: 10px;
+
+        .components-base-control {
+            margin-bottom: 0;
+        }
+    }
+
+    #responsive-block-gap-control .components-h-stack > span:first-child {
+        display: none;
     }
 }

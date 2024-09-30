@@ -1,27 +1,34 @@
 === TZM Responsive Block Controls ===
-Contributors:      TezmoMedia - Jakob Wiens
-Tags:              block, responsive, controls
+Contributors: TezmoMedia - Jakob Wiens
+Donate link: 
+Tags: responsivity, blocks, controls
 Requires at least: 5.6.0
-Tested up to:      6.0.2
-Stable tag:        1.0.0
-Requires PHP:      7.0.0
-License:           GPL-2.0-or-later
-License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+Tested up to: 6.7
+Stable tag: 1.0.0
+Requires PHP: 7.4.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Control your block's appearance depending on a device's screen width.
-
+TZM Responsive Block Controls lets you customize blocks for different screen sizes. Control visibility, alignments, font size, spacing, and much more.
 
 == Description ==
 
-wp i18n make-pot . languages/tzm-responsive-block-controls.pot
-wp i18n make-json languages/tzm-responsive-block-controls-de_DE.po --no-purge
-wp i18n make-json languages/tzm-responsive-block-controls-de_DE_formal.po --no-purge
+While the (Gutenberg) Block Editor has brought a lot of powerful tools to web design, it still falls short in one crucial aspect: **Responsive controls**
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+**TZM Responsive Block Controls** is here to fill the gap! 
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+This plugin enhances the Block Editor by adding a dedicated **Responsive controls** panel right inside your block settings. This allows you to customize how blocks appear on different devices. No more need for complicated workarounds or custom CSS!
 
+* **Hide Blocks:** Easily hide blocks on specific devices to create tailored layouts.
+* **Align and Justify Blocks:** Ensure fluid layouts by adjusting block alignment and justification across different devices.
+* **Reverse Direction:** Reverse the direction of blocks (like 'Media & Text', 'Columns', or 'Group' blocks) for optimized device-specific layouts.
+* **Font Size Adjustments:** Adjust font sizes per device to maintain readability and visual consistency.
+* **Control Padding and Margin:** Set custom padding and margins for each device to achieve perfect spacing.
+* **Block Gaps:** Adjust block spacing based on device type for optimal layout flow.
+* **Adjust Block Heights:** Set different block heights across devices to maintain consistent, visually appealing layouts.
+
+Although there are similar plugins out there, they usually lack the comprehensive feature set needed to fully implement responsive design within the Block Editor.
+**TZM Responsive Block Controls** was created based on the real-world needs of web designers and clients, addressing the common challenges that arise in modern responsive design.
 
 == Installation ==
 
@@ -29,39 +36,63 @@ Markdown parsed.
 
 2. Activate the plugin through the 'Plugins' screen in WordPress
 
-
 == Frequently Asked Questions ==
 
-= How can i define my own breakpoints? =
+= How does TZM Responsive Block Controls work behind the scenes? =
 
-function override_responsive_block_controls_breakpoints( $breakpoints ) {
-	$breakpoints['phone'] 	= '781px';
-	$breakpoints['tablet'] 	= '1024px';
-	$breakpoints['laptop'] 	= '1366px';
-	$breakpoints['mobile'] 	= '781px';
-	return $breakpoints;
-}
-add_filter('tzm_responsive_block_controls_breakpoints', 'override_responsive_block_controls_breakpoints');
+TZM Responsive Block Controls applies responsive styles to your blocks using a combination of CSS classes and inline styles with CSS variables, depending on the feature you use.
+
+CSS Classes: For features like hiding or reversing blocks, the plugin assigns CSS classes to the block's element. Examples include:
+- .tzm-responsive__hidden__phone – Hides the block on phone-sized screens.
+- .tzm-responsive__reverse__desktop – Reverses the block's flow direction on desktop screens.
+
+Inline Styles with CSS Variables: For features that require specific values, such as font size, padding, or margins, the plugin dynamically injects inline styles using CSS variables. This allows for more precise control and flexibility:
+- --tzm-responsive--font-size--tablet – Controls the font size on tablet-sized screens.
+- --tzm-responsive--padding-top--laptop – Adjusts the padding for laptop-sized screens.
+
+This combination ensures that your blocks adapt seamlessly across different devices and also enables easier customization, if you wish to override styling rules via custom CSS.
 
 
-= I want to use my own CSS. How can i disable the default CSS styling? =
+= Can i define my own breakpoints? =
 
-function enqueue_responsive_block_controls_css( $bool ) {
-	return false;
-}
-add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block_controls_css');
+Yes, you can easily customize the default breakpoints used by TZM Responsive Block Controls. Simply add the following code to your theme's functions.php file:
+
+	`function override_responsive_block_controls_breakpoints( $breakpoints ) {
+		$breakpoints['phone']   = '781px';
+		$breakpoints['tablet']  = '1024px';
+		$breakpoints['laptop']  = '1366px';
+		$breakpoints['mobile']  = '781px'; // Optional: Custom mobile breakpoint
+		return $breakpoints;
+	}
+	add_filter('tzm_responsive_block_controls_breakpoints', 'override_responsive_block_controls_breakpoints');`
+
+This will override the default breakpoints and allow you to use your own custom values.
+
+
+= I want to use my own CSS. How can I disable the default CSS styling? =
+
+If you prefer to use your own custom CSS for styling blocks, you can disable the plugin's default CSS output by adding this code to your theme's functions.php file:
+
+	`function enqueue_responsive_block_controls_css( $bool ) {
+		return false;
+	}
+	add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block_controls_css');`
+
+
+= What happens if I uninstall the plugin? =
+
+When you uninstall TZM Responsive Block Controls, any responsive controls (e.g. hiding blocks on specific devices, margin/padding adjustments) you have applied will no longer function. 
+However, your content will remain intact, and the blocks will revert to their default styling and behavior across all devices.
+
 
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
+1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif).
 2. This is the second screen shot
-
 
 == Changelog ==
 
-= 0.9.4 =
-* Release
+
+== Upgrade Notice ==
+

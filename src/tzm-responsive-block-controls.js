@@ -1,8 +1,8 @@
 /**
  * External Dependencies
  */
-import classnames from 'classnames';
-const { assign, merge } = lodash;
+import clsx from 'clsx';
+const { assign, kebabCase, merge } = lodash;
 
 /**
  * WordPress Dependencies
@@ -13,20 +13,23 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 
 import {
 	InspectorControls,	
-	//__experimentalSpacingSizesControl as SpacingSizesControl,
-	useSetting
+	useSettings
 } from '@wordpress/block-editor';
 
 import {
 	TabPanel,
-	PanelRow,
 	PanelBody,
-	ToggleControl,
-	Dashicon,
-	__experimentalDivider as Divider,
-	__experimentalBoxControl as BoxControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
+
+/**
+ * Internal Dependencies
+ */
+import { cleanEmptyObject } from './_utils';
+
+import GeneralLayoutPanel from './general-layout-panel';
+import ImageTypographyPanel from './image-typography-panel';
+import DimensionsPanel from './dimensions-panel';
 
 
 /**
@@ -84,157 +87,71 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			responsiveControls
 		} = attributes;
 
-		function isResponsiveControlsEmpty(newResponsiveControls = responsiveControls) {
-			if (newResponsiveControls && typeof newResponsiveControls === 'object') {
-
-				// Check every device in attribute
-				for (let device in newResponsiveControls) {
-					if (newResponsiveControls[device]) {
-						return false;
-					};
-				}
-			}	
-			return true;
-		}
-
-		function isResponsiveControlsDeviceEmpty(newDevice) {
-			if ( newDevice ) {
-
-				// Check every option in device
-				for (let option in newDevice) {
-					if (newDevice[option] === true || newDevice.padding || newDevice.margin) {
-						return false;
-					}
-				}
-			}
-			return true;
-		}
 
 		function ResponsiveBlockControls( {	device } ) {
 
-			const isContainerBlock = (
-				name === 'core/group' ||
-				name === 'core/columns' ||
-				name === 'core/cover' ||
-				name === 'core/media-text' ||
-				name === 'tzm/section'
-			);
-
-			const isReverseBlock = (
-				(name === 'core/group' && attributes.layout?.type === 'flex') ||
-				name === 'core/navigation' ||
-				name === 'core/columns' ||
-				name === 'core/media-text' ||
-				name === 'core/buttons'
-			);
-
+			// Get registered units
+			const [ availableUnits ] = useSettings( 'spacing.units' );
 			const units = useCustomUnits( {
-				availableUnits: useSetting( 'spacing.units' ) || [
-					'%',
-					'px',
-					'em',
-					'rem',
-					'vw',
-				],
+				availableUnits: availableUnits || [ 'px', 'em', 'rem', 'vw', 'vh', '%' ]
 			} );
 
-			const paddingValues = splitStyleValue( responsiveControls?.[device]?.padding );
-			const marginValues = splitStyleValue( responsiveControls?.[device]?.margin );
+			// Define block types
+			const isBlockType = {
+				container: (
+					name === 'core/group' ||
+					name === 'core/columns' ||
+					name === 'core/cover' ||
+					name === 'core/media-text' ||
+					name === 'tzm/section'
+				),
+				flex: (
+					attributes.layout?.type === 'flex' ||
+					name === 'core/navigation'
+				),
+				reversable: (
+					attributes.layout?.type === 'flex' ||
+					name === 'core/navigation' ||
+					name === 'core/columns' ||
+					name === 'core/media-text'
+				),
+				image: (
+					name === 'core/site-logo' ||
+					name === 'core/image'
+				)
+			};
 
-			function splitStyleValue( value ) {
-				// Check for shorthand value (a string value).
-				if ( value && typeof value === 'string' ) {
-					return {
-						top: value,
-						right: value,
-						bottom: value,
-						left: value,
-					};
-				}
-				return value;
+			// Clean and update 'responsiveControls' attribute
+			function updateResponsiveAttribute( updatedResponsiveControls = {} ) {
+				const cleanResponsiveControls = cleanEmptyObject(updatedResponsiveControls);
+
+				//console.log(cleanResponsiveControls);
+
+				setAttributes({ responsiveControls: cleanResponsiveControls });
 			}
 
-			function setOption(device, option, newVal) {
-				let newResponsiveControls = responsiveControls || {};
-				let newDevice = newResponsiveControls[device];
-
-				// Set newVal in newDevice
-				if (!newDevice) {
-					newDevice = {};
-				}
-				if (option !== 'padding' && option !== 'margin') {
-					newDevice[option] = newVal ? newVal : undefined;
-				} else {
-					newDevice[option] = !newVal.top && !newVal.right && !newVal.bottom && !newVal.left ? undefined : newVal;
-				}
-
-				// Check if newDevice is empty and clear it
-				if ( isResponsiveControlsDeviceEmpty(newDevice) ) {
-					newDevice = undefined;
-				}
-
-				// Check if newResponsiveControls is empty and reset attribute
-				newResponsiveControls[device] = newDevice;
-				if ( isResponsiveControlsEmpty(newResponsiveControls) ) {
-					setAttributes({	responsiveControls: null });
-
-				// Then set the attribute
-				} else {
-					setAttributes({	responsiveControls: { ...newResponsiveControls, [device]: newDevice } });
-				}
-			}			
 
 			return (
-				<>
-					<PanelRow>
-						<ToggleControl
-							label={ __('Hide', "tzm-responsive-block-controls") }
-							checked={ !!responsiveControls?.[device]?.hidden }
-							onChange={ (newVal) => setOption(device, 'hidden', newVal) }
-						/>
-						<Dashicon icon="visibility"/>
-					</PanelRow>
-					{ !! isReverseBlock && (
-						<PanelRow>
-							<ToggleControl
-								label={ __('Reverse', "tzm-responsive-block-controls") }
-								checked={ !!responsiveControls?.[device]?.reverse }
-								onChange={ (newVal) => setOption(device, 'reverse', newVal) }
-							/>
-							<Dashicon icon="randomize" />
-						</PanelRow>
-					) }
-					<PanelRow>
-						<ToggleControl
-							label={ __('Center', "tzm-responsive-block-controls") }
-							checked={ !!responsiveControls?.[device]?.center }
-							onChange={ (newVal) => setOption(device, 'center', newVal) }
-						/>
-						<Dashicon icon="editor-aligncenter" />
-					</PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __('Full width', "tzm-responsive-block-controls") }
-							checked={ !!responsiveControls?.[device]?.fullWidth }
-							onChange={ (newVal) => setOption(device, 'fullWidth', newVal) }
-						/>
-						<Dashicon icon="align-full-width" />
-					</PanelRow>
-
-					<Divider />
-					<BoxControl
-						label={ __( 'Padding' ) }
-						values={ paddingValues }
-						units={ units }
-						onChange={ (newVal) => setOption(device, 'padding', newVal) }
+				<>					
+					<GeneralLayoutPanel 
+						isBlockType={isBlockType} 
+						device={device} 
+						updateAttribute={updateResponsiveAttribute}
+						responsiveControls={responsiveControls}
 					/>
-					<BoxControl
-						label={ __( 'Margin' ) }
-						inputProps={{ min: -999 }}
-						values={ marginValues }
-						units={ units }
-						onChange={ (newVal) => setOption(device, 'margin', newVal) }
-						sides={ isContainerBlock ? ['top', 'bottom']: null }
+					<ImageTypographyPanel 
+						isBlockType={isBlockType} 
+						units={units}
+						device={device} 
+						updateAttribute={updateResponsiveAttribute}
+						responsiveControls={responsiveControls}
+					/>
+					<DimensionsPanel
+						isBlockType={isBlockType}
+						units={units}
+						device={device}
+						updateAttribute={updateResponsiveAttribute}
+						responsiveControls={responsiveControls}
 					/>
 				</>
 			);
@@ -245,13 +162,13 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 				<BlockEdit {...props} />
 				<InspectorControls>
 					<PanelBody
-						className={ classnames('block-editor-panel-responsive', {
+						className={ clsx('block-editor-panel-responsive', {
 							'has-active-phone-options': responsiveControls?.phone,
 							'has-active-tablet-options': responsiveControls?.tablet,
 							'has-active-laptop-options': responsiveControls?.laptop,
 							'has-active-desktop-options': responsiveControls?.desktop
 						}) }
-						title={ __('Responsiveness', "tzm-responsive-block-controls") }
+						title={ __('Responsive controls', "tzm-responsive-block-controls") }
 						initialOpen={ false }
 					>
 						<TabPanel
@@ -259,27 +176,31 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 							tabs={ [
 								{
 									name: 'phone',
-									title: <Dashicon icon="smartphone" />,
+									title: __("Phone", "tzm-responsive-block-controls"),
+									icon: 'smartphone',
 									className: 'tab-phone',
-									content: <ResponsiveBlockControls device='phone'/>
+									content: ResponsiveBlockControls({ device:'phone' })
 								},
 								{
 									name: 'tablet',
-									title: <Dashicon icon="tablet" />,
+									title: __("Tablet", "tzm-responsive-block-controls"),
+									icon: "tablet",
 									className: 'tab-tablet',
-									content: <ResponsiveBlockControls device='tablet' />
+									content: ResponsiveBlockControls({ device:'tablet' })
 								},
 								{
 									name: 'laptop',
-									title: <Dashicon icon="laptop" />,
+									title: __("Laptop", "tzm-responsive-block-controls"),
+									icon: "laptop",
 									className: 'tab-laptop',
-									content: <ResponsiveBlockControls device='laptop'/>
+									content: ResponsiveBlockControls({ device:'laptop' })
 								},
 								{
 									name: 'desktop',
-									title: <Dashicon icon="desktop" />,
+									title: __("Desktop", "tzm-responsive-block-controls"),
+									icon: "desktop",
 									className: 'tab-desktop',
-									content: <ResponsiveBlockControls device='desktop'/>
+									content: ResponsiveBlockControls({ device:'desktop' })
 								}
 							] }
 						>
@@ -295,9 +216,9 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 
 
 /**
- * Add responsive classes to the block in the editor
+ * Add responsive styling to the block in the editor
  */
-const addResponsiveClassesEditor = createHigherOrderComponent( (BlockListBlock) => {
+const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) => {
 	return (props) => {
 		
 		const {
@@ -309,64 +230,82 @@ const addResponsiveClassesEditor = createHigherOrderComponent( (BlockListBlock) 
 			responsiveControls
 		} = attributes;
 
-		function getClasses() {
-			let classes = [];
+		// Helper function to get responsive classes
+		function getResponsiveClasses() {
+			if (!responsiveControls || typeof responsiveControls !== 'object') return [];
 
-			if (responsiveControls && typeof responsiveControls === 'object') {
-				for (const [device, options] of Object.entries(responsiveControls)) {
+			return Object.entries(responsiveControls).reduce((classes, [device, options]) => {
+				if (typeof options === 'object') {
+					Object.entries(options).forEach(([option, value]) => {
 
-					if (typeof options === 'object') {
-						for (const [option, value] of Object.entries(options)) {
-
-							if (option !== 'padding' && option !== 'margin' && value) {
-								classes.push('tzm-responsive-' + option.toLowerCase() + '-' + device);
-							}
+						switch (option) {
+							case 'hidden':
+							case 'reverse':
+							case 'fullWidth':
+								classes.push(`tzm-responsive__${kebabCase(option)}__${device}`);
+								break;
 						}
-					}
+					});
 				}
-			}
-			return classes;
+				return classes;
+			}, []);
 		}
 
-		function getStyles() {
-			let styles = {};
+		// Helper function to get responsive styles
+		function getResponsiveStyles() {
+			if (!responsiveControls || typeof responsiveControls !== 'object') return {};
+			
+			return Object.entries(responsiveControls).reduce((styles, [device, options]) => {
+				if (typeof options === 'object') {
+					Object.entries(options).forEach(([option, value]) => {
 
-			if (responsiveControls && typeof responsiveControls === 'object') {
-				for (const [device, options] of Object.entries(responsiveControls)) {
-
-					if (typeof options === 'object') {
-						for (const [option, value] of Object.entries(options)) {
-
-							if ( (option == 'padding' || option == 'margin') && typeof value === 'object') {
-								if (Object.keys(value).length === 4) {
-									let isShort = (value['top'] == value['right'] && value['top'] == value['bottom'] && value['top'] == value['left']);
-									let valStr = value['top'] + ' ' + value['right'] + ' ' + value['bottom'] + ' ' + value['left'];
-									styles['--tzm--responsive--' + option + '--' + device] = isShort ? value['top'] : valStr;
-								
-								} else {
-									for (const [dir, dirVal] of Object.entries(value)) {
-										styles['--tzm--responsive--' + option + '-' + dir + '--' + device] = dirVal;
+						switch (option) {
+							case 'padding':
+							case 'margin':
+								if (typeof value === 'object') {
+									const fullSet = ['top', 'right', 'bottom', 'left'];
+									const hasAllSides = fullSet.every((side) => value[side] !== undefined);
+		
+									if (hasAllSides) {
+										const isUniform = fullSet.every((side) => value[side] === value['top']);
+										styles[`--tzm-responsive--${option}--${device}`] = isUniform
+											? value['top']
+											: `${value['top']} ${value['right']} ${value['bottom']} ${value['left']}`;
+									} else {
+										Object.entries(value).forEach(([direction, dirValue]) => {
+											styles[`--tzm-responsive--${option}-${direction}--${device}`] = dirValue;
+										});
 									}
 								}
-							}
+								break;
+
+							case 'blockGap':
+								if (typeof value === 'object' && 'top' in value) {
+									styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value.top;
+								}
+								break;
+
+							default:
+								if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
 						}
-					}
+					});
 				}
-			}
-			return styles;
+				return styles;
+			}, {});
 		}
 
-		let wrapperProps = props.wrapperProps || {};
-        wrapperProps.style = getStyles();
+		// Assign wrapper props and styles
+		let wrapperProps = { ...props.wrapperProps, style: getResponsiveStyles() };
 
 		return (
 			<BlockListBlock	{ ...props } 
-				className={ classnames(className, getClasses()) }
+				className={ clsx(className, getResponsiveClasses()) }
 				wrapperProps={ wrapperProps }
 			/>
 		);
+
 	};
-}, 'addResponsiveClassesEditor' );
+}, 'addResponsiveStylingEditor' );
 
 
 /**
@@ -389,7 +328,7 @@ const addResponsiveClassesEditor = createHigherOrderComponent( (BlockListBlock) 
 	} = attributes;
 	
 	return assign( {}, props, {
-		className: classnames( 
+		className: clsx( 
 			className, 'tzm-responsive-test', {
 				[`tzm-responsive-${responsiveControls?.id}`]: responsiveControls && responsiveControls.id
 			}
@@ -411,12 +350,12 @@ addFilter(
 
 addFilter(
    'editor.BlockListBlock',
-   'tzm/responsive-clasess-editor',
-   addResponsiveClassesEditor
+   'tzm/responsive-styling-editor',
+   addResponsiveStylingEditor
 );
 
 /*addFilter(
 	'blocks.getSaveContent.extraProps',
-	'tzm/responsive-classes-frontend',
-	addResponsiveClasses
+	'tzm/responsive-styling-frontend',
+	addResponsiveStyling
 );*/
