@@ -114,7 +114,7 @@ export default function DimensionsPanel({
                 />
             </ToolsPanelItem>
 
-            <ToolsPanelItem isShownByDefault
+            <ToolsPanelItem
                 label={ __("Block spacing") }
                 hasValue={ () => isBlockGap }
                 onDeselect={ () => setBlockGap() }
@@ -130,7 +130,7 @@ export default function DimensionsPanel({
                 />
             </ToolsPanelItem>
 
-            <ToolsPanelItem isShownByDefault
+            <ToolsPanelItem
                 label={ __("Minimum height") }
                 hasValue={ () => isHeight }
                 onDeselect={ () => setHeight() }

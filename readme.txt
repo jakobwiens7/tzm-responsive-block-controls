@@ -1,35 +1,36 @@
 === TZM Responsive Block Controls ===
-Contributors: TezmoMedia - Jakob Wiens
-Donate link: 
-Tags: responsivity, blocks, controls
-Requires at least: 5.6.0
-Tested up to: 6.7
+Contributors: jakobwiens
+Tags: responsivity, responsive, block controls, mobile, customization
+Requires at least: 6.4.0
+Tested up to: 6.6.2
 Stable tag: 1.0.0
 Requires PHP: 7.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-TZM Responsive Block Controls lets you customize blocks for different screen sizes. Control visibility, alignments, font size, spacing, and much more.
+TZM Responsive Block Controls lets you customize blocks for different screen sizes. Control visibility, alignment, font size, spacing, and much more.
+
 
 == Description ==
 
 While the (Gutenberg) Block Editor has brought a lot of amazing and powerful tools to web design, it still falls short in one crucial aspect: **Responsive controls**
 
-**TZM Responsive Block Controls** is here to fill the gap! 
+=== TZM Responsive Block Controls is here to fill the gap! ===
 
-This plugin enhances the Block Editor by adding a dedicated **Responsive controls** panel right inside your block settings. The provided options allow you to customize how your blocks appear on different devices. No more need for complicated workarounds or custom CSS!
+This plugin enhances the Block Editor by adding a dedicated **Responsive controls** panel right inside your block's settings tab. 
+The provided options allow you to customize how your blocks appear on different devices. No more need for complicated workarounds or custom CSS!
 
 * **Hide Blocks:** Easily hide blocks on specific devices to create tailored layouts.
 * **Full Width Blocks:** Make blocks take up the full width of their available space to adjust layouts on mobile devices.
-* **Align and Justify Blocks:** Ensure fluid layouts by adjusting block alignment and justification across different devices.
-* **Reverse Direction:** Reverse the direction of blocks (like 'Media & Text', 'Columns', or 'Group' blocks) for optimized device-specific layouts.
+* **Reverse Direction:** Reverse the direction/order of blocks (like 'Media & Text', 'Columns', or 'Row' blocks) for optimized layouts.
+* **Justify Blocks:** Ensure fluid layouts by adjusting block justification across different devices.
+* **Align Images and Text:** Control horizontal alignment of images and text for consistent layouts across devices.
 * **Font Size Adjustments:** Adjust font sizes per device to maintain readability and visual consistency.
 * **Control Padding and Margin:** Set custom padding and margins for each device to achieve perfect spacing.
-* **Block Gaps:** Adjust block spacing based on device type for optimal layout flow.
+* **Adjust Block Gaps:** Adjust block spacing based on device type for optimal layout flow.
 * **Adjust Block Heights:** Set different block heights across devices to maintain consistent, visually appealing layouts.
 
-Although there are similar plugins out there, they usually lack the comprehensive feature set needed to fully implement responsive design within the Block Editor.
-**TZM Responsive Block Controls** was created based on the real-world needs of web designers and clients, addressing the common challenges that arise in modern responsive design.
+With its extensive feature set, TZM Responsive Block Controls provides everything you need to create stunning and visually appealing designs across different devices.
 
 == Installation ==
 
@@ -37,41 +38,42 @@ Although there are similar plugins out there, they usually lack the comprehensiv
 
 2. Activate the plugin through the 'Plugins' screen in WordPress
 
+
 == Frequently Asked Questions ==
 
 = How does TZM Responsive Block Controls work behind the scenes? =
-
-TZM Responsive Block Controls applies responsive styles to your blocks using a combination of CSS classes and inline styles with CSS variables, depending on the feature you use.
+TZM Responsive Block Controls applies responsive styles to your blocks using a combination of CSS classes and inline styles with CSS variables.
 
 CSS Classes: For features like hiding or reversing blocks, the plugin assigns CSS classes to the block's element. Examples include:
 * .tzm-responsive__hidden__phone – Hides the block on phone-sized screens.
 * .tzm-responsive__reverse__desktop – Reverses the block's flow direction on desktop screens.
 
-Inline Styles with CSS Variables: For features that require specific values, such as font size, padding, or margins, the plugin dynamically injects inline styles using CSS variables. This allows for more precise control and flexibility:
+Inline Styles with CSS Variables: For features that require specific values, such as font size, padding, or margins, the plugin dynamically injects inline styles using CSS variables:
 * --tzm-responsive--font-size--tablet – Controls the font size on tablet-sized screens.
 * --tzm-responsive--padding-top--laptop – Adjusts the padding for laptop-sized screens.
 
-This combination ensures that your blocks adapt seamlessly across different devices and also enables easier customization, if you wish to override styling rules via custom CSS.
+Note: This plugin relies on `!important` declarations to ensure styles are applied correctly. While the use of `!important` is typically discouraged, it is necessary in certain cases to achieve consistent, responsive behavior across devices. Please keep this in mind.
 
+= Does TZM Responsive Block Controls work with third-party blocks? =
+While it is primarily designed to target core blocks, some responsive features should also work with third-party blocks. 
+However, third-party blocks may not always behave the same way as core blocks, which can lead to unexpected results or prevent the responsive controls from taking effect. This issue can also arise with core blocks when using plugins or themes that modify how those blocks function or are styled.
+
+We plan to fully support other popular plugins, such as WooCommerce blocks and more. Feel free to suggest Plugins you think TZM Responsive Block Controls should support - maybe we'll consider that for widely used and requested plugins :)
 
 = Can i define my own breakpoints? =
-
 Yes, you can easily customize the default breakpoints used by TZM Responsive Block Controls. Simply add the following code to your theme's functions.php file:
 
 	`function override_responsive_block_controls_breakpoints( $breakpoints ) {
 		$breakpoints['phone']   = '781px';
 		$breakpoints['tablet']  = '1024px';
 		$breakpoints['laptop']  = '1366px';
-		$breakpoints['mobile']  = '781px'; // Optional: Custom mobile breakpoint
 		return $breakpoints;
 	}
 	add_filter('tzm_responsive_block_controls_breakpoints', 'override_responsive_block_controls_breakpoints');`
 
 This will override the default breakpoints and allow you to use your own custom values.
 
-
 = I want to use my own CSS. How can I disable the default CSS styling? =
-
 If you prefer to use your own custom CSS for styling blocks, you can disable the plugin's default CSS output by adding this code to your theme's functions.php file:
 
 	`function enqueue_responsive_block_controls_css( $bool ) {
@@ -79,21 +81,27 @@ If you prefer to use your own custom CSS for styling blocks, you can disable the
 	}
 	add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block_controls_css');`
 
+= Does it work with classic themes? =
+No, this plugin is designed specifically for use with the Block Editor and works only with block-based themes. 
+It doesn’t support classic themes that use the older editor framework.
 
 = What happens if I uninstall the plugin? =
-
-When you uninstall TZM Responsive Block Controls, any responsive controls (e.g. hiding blocks on specific devices, margin/padding adjustments) you have applied will no longer function. 
+When you uninstall TZM Responsive Block Controls, any responsive adjustments (e.g. hiding blocks, margin/padding) you have applied will no longer work. 
 However, your content will remain intact, and the blocks will revert to their default styling and behavior across all devices.
-
 
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif).
-2. This is the second screen shot
+1. The Responsive Controls panel in your Inspector Controls provides an extensive and easy-to-use feature set
+2. Preview responsive adjustments instantly (Desktop view)
+3. Preview responsive adjustments instantly (Tablet view)
+4. Preview responsive adjustments instantly (Phone/Mobile view)
+
 
 == Changelog ==
 
+= 1.0.0 = 
+Initial release :)
+
 
 == Upgrade Notice ==
-

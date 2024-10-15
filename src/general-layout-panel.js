@@ -8,7 +8,7 @@ import {
 	Button, 
 	ButtonGroup,
 	ToggleControl,
-	Dashicon,
+	//Dashicon,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
@@ -54,6 +54,11 @@ export default function GeneralLayoutPanel({
             justify: newValue
     }});
 
+    const isImageAlign = !! responsiveControls?.[device]?.imageAlign;
+    const setImageAlign = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
+        imageAlign: newValue
+    }});
+
     const resetAll = () => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
         hidden: undefined, 
         fullwidth: undefined, 
@@ -75,7 +80,6 @@ export default function GeneralLayoutPanel({
                     checked={ isHidden }
                     onChange={ setHidden }
                 />
-                <Dashicon icon="visibility"/>
             </ToolsPanelItem>
 
             <ToolsPanelItem isShownByDefault
@@ -88,10 +92,9 @@ export default function GeneralLayoutPanel({
                     checked={ isFullWidth }
                     onChange={ setFullWidth }
                 />
-                <Dashicon icon="align-full-width" />
             </ToolsPanelItem>
 
-        { !! isBlockType.reversable && (
+        { !! isBlockType.reverse && (
             <ToolsPanelItem isShownByDefault
                 label={ __("Reverse order", "tzm-responsive-block-controls") } 
                 hasValue={ () => isReverse }
@@ -102,11 +105,10 @@ export default function GeneralLayoutPanel({
                     checked={ isReverse }
                     onChange={ setReverse }
                 />
-                <Dashicon icon="randomize" />
             </ToolsPanelItem>
         ) }
 
-        { !! isBlockType.flex && (
+        { !! isBlockType.justify && (
             <ToolsPanelItem isShownByDefault
                 label={ __("Block justification", "tzm-responsive-block-controls") } 
                 hasValue={ () => isJustify }
@@ -141,7 +143,35 @@ export default function GeneralLayoutPanel({
                 </BaseControl>
             </ToolsPanelItem>
         ) }
-
+        { !! isBlockType.image && (
+            <ToolsPanelItem isShownByDefault
+                label={ __("Image alignment", "tzm-responsive-block-controls") }
+                hasValue={ () => isImageAlign }
+                onDeselect={ () => setImageAlign() }
+            >
+                <BaseControl __nextHasNoMarginBottom 
+                    label={ __("Image alignment", "tzm-responsive-block-controls") }
+                >
+                    <ButtonGroup>
+                        <Button __next40pxDefaultSize icon="align-left" 
+                            label={ __("Align image left", "tzm-responsive-block-controls") }
+                            isPressed={ responsiveControls?.[device]?.imageAlign == 'left' }
+                            onClick={ () => setImageAlign(responsiveControls?.[device]?.imageAlign == 'left' ? undefined : 'left') }
+                        />
+                        <Button __next40pxDefaultSize icon="align-center" 
+                            label={ __("Align image centered", "tzm-responsive-block-controls") }
+                            isPressed={ responsiveControls?.[device]?.imageAlign == 'center' }
+                            onClick={ () => setImageAlign(responsiveControls?.[device]?.imageAlign == 'center' ? undefined : 'center') }
+                        />
+                        <Button __next40pxDefaultSize icon="align-right" 
+                            label={ __("Align image right", "tzm-responsive-block-controls") }
+                            isPressed={ responsiveControls?.[device]?.imageAlign == 'right' }
+                            onClick={ () => setImageAlign(responsiveControls?.[device]?.imageAlign == 'right' ? undefined : 'right') }
+                        />
+                    </ButtonGroup>
+                </BaseControl>
+            </ToolsPanelItem>
+        ) }
     </ToolsPanel>
     );
 }

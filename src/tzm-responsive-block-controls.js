@@ -28,7 +28,7 @@ import {
 import { cleanEmptyObject } from './_utils';
 
 import GeneralLayoutPanel from './general-layout-panel';
-import ImageTypographyPanel from './image-typography-panel';
+import TypographyPanel from './typography-panel';
 import DimensionsPanel from './dimensions-panel';
 
 
@@ -105,19 +105,27 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 					name === 'core/media-text' ||
 					name === 'tzm/section'
 				),
-				flex: (
+				justify: (
 					attributes.layout?.type === 'flex' ||
-					name === 'core/navigation'
+					name === 'core/navigation' ||
+					name === 'core/buttons'
 				),
-				reversable: (
+				reverse: (
 					attributes.layout?.type === 'flex' ||
 					name === 'core/navigation' ||
 					name === 'core/columns' ||
-					name === 'core/media-text'
+					name === 'core/media-text' ||
+					name === 'core/gallery' ||
+					name === 'core/buttons'
 				),
 				image: (
 					name === 'core/site-logo' ||
+					name === 'core/post-featured-image' ||
 					name === 'core/image'
+				),
+				typography: (
+					name !== 'core/site-logo' &&
+					name !== 'core/post-featured-image'
 				)
 			};
 
@@ -139,13 +147,15 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 						updateAttribute={updateResponsiveAttribute}
 						responsiveControls={responsiveControls}
 					/>
-					<ImageTypographyPanel 
-						isBlockType={isBlockType} 
-						units={units}
-						device={device} 
-						updateAttribute={updateResponsiveAttribute}
-						responsiveControls={responsiveControls}
-					/>
+					{ !! isBlockType.typography && (
+						<TypographyPanel 
+							isBlockType={isBlockType} 
+							units={units}
+							device={device} 
+							updateAttribute={updateResponsiveAttribute}
+							responsiveControls={responsiveControls}
+						/>
+					) }
 					<DimensionsPanel
 						isBlockType={isBlockType}
 						units={units}
@@ -244,6 +254,10 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 							case 'fullWidth':
 								classes.push(`tzm-responsive__${kebabCase(option)}__${device}`);
 								break;
+							
+							case 'imageAlign':
+								classes.push(`tzm-responsive__${kebabCase(option)}-${value}__${device}`);
+								break;
 						}
 					});
 				}
@@ -284,9 +298,13 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 									styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value.top;
 								}
 								break;
-
-							default:
+							
+							case 'justify':
+							case 'textAlign':
+							case 'fontSize':
+							case 'height':
 								if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
+								break;
 						}
 					});
 				}

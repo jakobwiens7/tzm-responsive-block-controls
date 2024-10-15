@@ -3,14 +3,14 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			0.9.72
+ * Version:			1.0.0
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
  * License URI:		https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:		tzm-responsive-block-controls
  * Domain Path:		/languages
- * Requires at least: 6.2
+ * Requires at least: 6.4
  */
 
 // Exit if accessed directly.
@@ -48,7 +48,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             add_action('enqueue_block_editor_assets', array($this, 'enqueue_editor_assets'));
 
             // Enqueue both backend + frontend block assets
-            add_action('enqueue_block_assets', array($this, 'enqueue_block_assets'));
+            add_action('enqueue_block_assets', array($this, 'enqueue_block_assets'), 100);
 
             // Add the responsive controls attribute to blocks.
             add_action('wp_loaded', array($this, 'add_attribute_to_blocks'), 100);
@@ -85,6 +85,53 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
         }
 
 
+        // Function to recursively extract and merge responsive controls attributes
+        private function collect_responsive_attributes($blocks)
+        {
+            $responsive_attributes = [
+                'desktop' => [],
+                'laptop'  => [],
+                'tablet'  => [],
+                'phone'   => []
+            ];
+
+            foreach ($blocks as $block) {
+                // Check if the block has attributes and 'responsiveControls' array exists
+                if (isset($block['attrs']['responsiveControls']) && is_array($block['attrs']['responsiveControls'])) {
+                    $responsive_controls = $block['attrs']['responsiveControls'];
+
+                    // Iterate over each device key (desktop, laptop, tablet, phone)
+                    foreach (['desktop', 'laptop', 'tablet', 'phone'] as $device) {
+                        if (isset($responsive_controls[$device])) {
+                            // Extract the keys (attribute names) for each device
+                            $atts = array_keys($responsive_controls[$device]);
+
+                            // Merge the attribute names, ensuring no duplicates
+                            $responsive_attributes[$device] = array_unique(array_merge(
+                                $responsive_attributes[$device],
+                                $atts
+                            ));
+                        }
+                    }
+                }
+
+                // Recursively extract attributes from inner blocks
+                if (isset($block['innerBlocks']) && !empty($block['innerBlocks'])) {
+                    $inner_atts = $this->collect_responsive_attributes($block['innerBlocks'], $responsive_attributes);
+
+                    foreach (['desktop', 'laptop', 'tablet', 'phone'] as $device) {
+                        $responsive_attributes[$device] = array_unique(array_merge(
+                            $responsive_attributes[$device],
+                            $inner_atts[$device]
+                        ));
+                    }
+                }
+            }
+
+            return $responsive_attributes;
+        }
+
+
         /**
          * Generate responsive block stylesheet
          */
@@ -93,14 +140,19 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             // Apply Filter wether to allow or prevent CSS output
             if (!apply_filters('tzm_responsive_block_controls_output_css', true)) return false;
 
-            // Apply Filter to allow custom breakpoints
-            $breakpoints = apply_filters('tzm_responsive_block_controls_breakpoints', array(
+            $default_breakpoints = array(
                 'phone'     => '781px',
                 'tablet'    => '1024px',
                 'laptop'    => '1366px',
-                'desktop'   => '1680px', // for now this is will be ignored
+                'desktop'   => '1680px', // for now this value is will be ignored
                 'mobile'    => '1024px'   // wp block related mobile breakpoint
-            ));
+            );
+
+            // Apply Filter to allow custom breakpoints
+            $breakpoints = apply_filters('tzm_responsive_block_controls_breakpoints', $default_breakpoints);
+
+            // Merge provided breakpoints with defaults and restrict to only default keys
+            $breakpoints = array_intersect_key(array_merge($default_breakpoints, $breakpoints));
 
             // Get source CSS stylesheet
             $css = file_get_contents(plugin_dir_path(__FILE__) . 'build/style-tzm-responsive-block-controls.css');
@@ -223,6 +275,10 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                             $classes[] = 'tzm-responsive__' . _wp_to_kebab_case($option) . '__' . $device;
                             break;
 
+                        case 'imageAlign':
+                            $classes[] = 'tzm-responsive__' . _wp_to_kebab_case($option) . '-' . $value . '__' . $device;
+                            break;
+
                             // Collect styles
                         case 'padding':
                         case 'margin':
@@ -240,7 +296,10 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                             $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ':' . $value['top'];
                             break;
 
-                        default:
+                        case 'justify':
+                        case 'textAlign':
+                        case 'fontSize':
+                        case 'height':
                             $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ':' . $value;
                     }
                 }
