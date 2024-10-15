@@ -13,13 +13,14 @@ TZM Responsive Block Controls lets you customize blocks for different screen siz
 
 == Description ==
 
-While the (Gutenberg) Block Editor has brought a lot of powerful tools to web design, it still falls short in one crucial aspect: **Responsive controls**
+While the (Gutenberg) Block Editor has brought a lot of amazing and powerful tools to web design, it still falls short in one crucial aspect: **Responsive controls**
 
 **TZM Responsive Block Controls** is here to fill the gap! 
 
-This plugin enhances the Block Editor by adding a dedicated **Responsive controls** panel right inside your block settings. This allows you to customize how blocks appear on different devices. No more need for complicated workarounds or custom CSS!
+This plugin enhances the Block Editor by adding a dedicated **Responsive controls** panel right inside your block settings. The provided options allow you to customize how your blocks appear on different devices. No more need for complicated workarounds or custom CSS!
 
 * **Hide Blocks:** Easily hide blocks on specific devices to create tailored layouts.
+* **Full Width Blocks:** Make blocks take up the full width of their available space to adjust layouts on mobile devices.
 * **Align and Justify Blocks:** Ensure fluid layouts by adjusting block alignment and justification across different devices.
 * **Reverse Direction:** Reverse the direction of blocks (like 'Media & Text', 'Columns', or 'Group' blocks) for optimized device-specific layouts.
 * **Font Size Adjustments:** Adjust font sizes per device to maintain readability and visual consistency.
@@ -43,12 +44,12 @@ Although there are similar plugins out there, they usually lack the comprehensiv
 TZM Responsive Block Controls applies responsive styles to your blocks using a combination of CSS classes and inline styles with CSS variables, depending on the feature you use.
 
 CSS Classes: For features like hiding or reversing blocks, the plugin assigns CSS classes to the block's element. Examples include:
-- .tzm-responsive__hidden__phone – Hides the block on phone-sized screens.
-- .tzm-responsive__reverse__desktop – Reverses the block's flow direction on desktop screens.
+* .tzm-responsive__hidden__phone – Hides the block on phone-sized screens.
+* .tzm-responsive__reverse__desktop – Reverses the block's flow direction on desktop screens.
 
 Inline Styles with CSS Variables: For features that require specific values, such as font size, padding, or margins, the plugin dynamically injects inline styles using CSS variables. This allows for more precise control and flexibility:
-- --tzm-responsive--font-size--tablet – Controls the font size on tablet-sized screens.
-- --tzm-responsive--padding-top--laptop – Adjusts the padding for laptop-sized screens.
+* --tzm-responsive--font-size--tablet – Controls the font size on tablet-sized screens.
+* --tzm-responsive--padding-top--laptop – Adjusts the padding for laptop-sized screens.
 
 This combination ensures that your blocks adapt seamlessly across different devices and also enables easier customization, if you wish to override styling rules via custom CSS.
 
