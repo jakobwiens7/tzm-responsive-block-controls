@@ -1,5 +1,1 @@
-/.git
-/.vscode
-/node_modules
-/package-lock.json
-/.eslintrc
+node_modules
