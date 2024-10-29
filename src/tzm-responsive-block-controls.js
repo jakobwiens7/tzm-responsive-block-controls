@@ -108,7 +108,8 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 				justify: (
 					attributes.layout?.type === 'flex' ||
 					name === 'core/navigation' ||
-					name === 'core/buttons'
+					name === 'core/buttons' ||
+					name === 'core/social-links'
 				),
 				reverse: (
 					attributes.layout?.type === 'flex' ||
@@ -116,7 +117,8 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 					name === 'core/columns' ||
 					name === 'core/media-text' ||
 					name === 'core/gallery' ||
-					name === 'core/buttons'
+					name === 'core/buttons' ||
+					name === 'core/social-links'
 				),
 				image: (
 					name === 'core/site-logo' ||

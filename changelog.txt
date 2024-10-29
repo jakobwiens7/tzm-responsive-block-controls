@@ -1,0 +1,9 @@
+== 1.0.2 ==
+- Added "Justification" and "Reverse block" support for "Social Links" block
+- Added changelog.txt
+
+== 1.0.1 ==
+- Fixed "Reverse block" functionality when "Stack on mobile" is enabled
+
+== 1.0.0 ==
+- Initial release :)

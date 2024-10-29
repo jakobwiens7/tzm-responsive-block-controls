@@ -3,7 +3,7 @@ Contributors: jakobwiens
 Tags: responsivity, responsive, block controls, mobile, customization
 Requires at least: 6.4.0
 Tested up to: 6.6.2
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 Requires PHP: 7.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -45,20 +45,18 @@ With its extensive feature set, TZM Responsive Block Controls provides everythin
 TZM Responsive Block Controls applies responsive styles to your blocks using a combination of CSS classes and inline styles with CSS variables.
 
 CSS Classes: For features like hiding or reversing blocks, the plugin assigns CSS classes to the block's element. Examples include:
-* .tzm-responsive__hidden__phone – Hides the block on phone-sized screens.
-* .tzm-responsive__reverse__desktop – Reverses the block's flow direction on desktop screens.
+`.tzm-responsive__hidden__phone` – Hides the block on phone-sized screens.
+`.tzm-responsive__reverse__desktop` – Reverses the block's flow direction on desktop screens.
 
 Inline Styles with CSS Variables: For features that require specific values, such as font size, padding, or margins, the plugin dynamically injects inline styles using CSS variables:
-* --tzm-responsive--font-size--tablet – Controls the font size on tablet-sized screens.
-* --tzm-responsive--padding-top--laptop – Adjusts the padding for laptop-sized screens.
+`--tzm-responsive--font-size--tablet` – Controls the font size on tablet-sized screens.
+`--tzm-responsive--padding-top--laptop` – Adjusts the padding for laptop-sized screens.
 
 Note: This plugin relies on `!important` declarations to ensure styles are applied correctly. While the use of `!important` is typically discouraged, it is necessary in certain cases to achieve consistent, responsive behavior across devices. Please keep this in mind.
 
 = Does TZM Responsive Block Controls work with third-party blocks? =
-While it is primarily designed to target core blocks, some responsive features should also work with third-party blocks. 
-However, third-party blocks may not always behave the same way as core blocks, which can lead to unexpected results or prevent the responsive controls from taking effect. This issue can also arise with core blocks when using plugins or themes that modify how those blocks function or are styled.
-
-We plan to fully support other popular plugins, such as WooCommerce blocks and more. Feel free to suggest Plugins you think TZM Responsive Block Controls should support - maybe we'll consider that for widely used and requested plugins :)
+While it is primarily designed to target core blocks, some responsive features should also work with third-party blocks. However, third-party blocks may not always behave the same way as core blocks, which can lead to unexpected results or prevent the responsive controls from taking effect. This issue can also arise with core blocks when using plugins or themes that modify how those blocks function or are styled.
+We plan to fully support other popular plugins, such as WooCommerce blocks and more. Feel free to suggest blocks or plugins you think *TZM Responsive Block Controls* should support - maybe we'll consider that for widely used and requested plugins :)
 
 = Can i define my own breakpoints? =
 Yes, you can easily customize the default breakpoints used by TZM Responsive Block Controls. Simply add the following code to your theme's functions.php file:
@@ -86,7 +84,7 @@ No, this plugin is designed specifically for use with the Block Editor and works
 It doesn’t support classic themes that use the older editor framework.
 
 = What happens if I uninstall the plugin? =
-When you uninstall TZM Responsive Block Controls, any responsive adjustments (e.g. hiding blocks, margin/padding) you have applied will no longer work. 
+When you uninstall *TZM Responsive Block Controls*, any responsive adjustments (e.g. hiding blocks, margin/padding) you have applied will no longer work. 
 However, your content will remain intact, and the blocks will revert to their default styling and behavior across all devices.
 
 
@@ -100,8 +98,15 @@ However, your content will remain intact, and the blocks will revert to their de
 
 == Changelog ==
 
+== 1.0.2 ==
+- Added "Justification" and "Reverse block" support for "Social Links" block
+- Added changelog.txt
+
+= 1.0.1 = 
+- Fixed "Reverse block" functionality when "Stack on mobile" is enabled
+
 = 1.0.0 = 
-Initial release :)
+- Initial release :)
 
 
 == Upgrade Notice ==

@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			1.0.0
+ * Version:			1.0.2
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
@@ -85,53 +85,6 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
         }
 
 
-        // Function to recursively extract and merge responsive controls attributes
-        private function collect_responsive_attributes($blocks)
-        {
-            $responsive_attributes = [
-                'desktop' => [],
-                'laptop'  => [],
-                'tablet'  => [],
-                'phone'   => []
-            ];
-
-            foreach ($blocks as $block) {
-                // Check if the block has attributes and 'responsiveControls' array exists
-                if (isset($block['attrs']['responsiveControls']) && is_array($block['attrs']['responsiveControls'])) {
-                    $responsive_controls = $block['attrs']['responsiveControls'];
-
-                    // Iterate over each device key (desktop, laptop, tablet, phone)
-                    foreach (['desktop', 'laptop', 'tablet', 'phone'] as $device) {
-                        if (isset($responsive_controls[$device])) {
-                            // Extract the keys (attribute names) for each device
-                            $atts = array_keys($responsive_controls[$device]);
-
-                            // Merge the attribute names, ensuring no duplicates
-                            $responsive_attributes[$device] = array_unique(array_merge(
-                                $responsive_attributes[$device],
-                                $atts
-                            ));
-                        }
-                    }
-                }
-
-                // Recursively extract attributes from inner blocks
-                if (isset($block['innerBlocks']) && !empty($block['innerBlocks'])) {
-                    $inner_atts = $this->collect_responsive_attributes($block['innerBlocks'], $responsive_attributes);
-
-                    foreach (['desktop', 'laptop', 'tablet', 'phone'] as $device) {
-                        $responsive_attributes[$device] = array_unique(array_merge(
-                            $responsive_attributes[$device],
-                            $inner_atts[$device]
-                        ));
-                    }
-                }
-            }
-
-            return $responsive_attributes;
-        }
-
-
         /**
          * Generate responsive block stylesheet
          */
@@ -156,7 +109,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
 
             // Get source CSS stylesheet
             $css = file_get_contents(plugin_dir_path(__FILE__) . 'build/style-tzm-responsive-block-controls.css');
-            $mobile_css = '.tzm-responsive__reverse-_DEVICE_.is-layout-flex:not(.wp-block-group):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important; }';
+            $mobile_css = '.tzm-responsive__reverse___DEVICE_.is-layout-flex:not(.wp-block-group):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important; }';
 
             // Generate responsive CSS stylesheet
             $output_css = '';
@@ -169,6 +122,8 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 switch ($device) {
                     case 'mobile':
                         $output_css .= '@media screen and (max-width: ' . $breakpoints['mobile'] . ') {';
+                        $output_css .= str_replace($placeholder, 'phone', $mobile_css);
+                        $output_css .= str_replace($placeholder, 'tablet', $mobile_css); // To-Do: Maybe check if tablet breakpoint is same as mobile breakpoint?
                         break;
                     case 'phone':
                         $output_css .= '@media screen and (max-width: ' . $breakpoints['phone'] . ') {';
@@ -187,7 +142,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 }
 
                 // Insert the corresponding CSS for the device, replacing the placeholder
-                $output_css .= str_replace($placeholder, $device, ($device == 'mobile') ? $mobile_css : $css);
+                if ($device !== 'mobile') $output_css .= str_replace($placeholder, $device, $css);
 
                 // Add the current device's media query closing bracket
                 $output_css .= '}';
