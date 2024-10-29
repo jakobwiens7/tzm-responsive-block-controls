@@ -13,7 +13,7 @@ import { isEmpty, isObject, identity, mapValues, pickBy } from 'lodash';
  * @return {string|number} - Returns the value with the default unit appended if the value is a number or a numeric string. 
  */
 export function addFallbackUnit(value, defaultUnit = 'px') {
-	if (value === '') return value;
+	if (value === '' || isNaN(parseFloat(value))) return null;
 	else if (typeof value === 'number') return value + defaultUnit;
 	else if (typeof value === 'string' && !isNaN(value)) return value.trim() + defaultUnit;
 	

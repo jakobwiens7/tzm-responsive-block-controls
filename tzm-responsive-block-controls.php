@@ -109,7 +109,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
 
             // Get source CSS stylesheet
             $css = file_get_contents(plugin_dir_path(__FILE__) . 'build/style-tzm-responsive-block-controls.css');
-            $mobile_css = '.tzm-responsive__reverse___DEVICE_.is-layout-flex:not(.wp-block-group):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important; }';
+            $mobile_css = '.tzm-responsive__reverse___DEVICE_.is-layout-flex:not(.wp-block-group):not(.wp-block-navigation):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important; }';
 
             // Generate responsive CSS stylesheet
             $output_css = '';

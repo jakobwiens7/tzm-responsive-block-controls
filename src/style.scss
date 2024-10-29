@@ -37,10 +37,10 @@ $device: "_DEVICE_";
 
 // Reverse
 .tzm-responsive__reverse__#{$device} {
-    &.is-layout-flex:not(.is-vertical) {
+    &.is-layout-flex:not(.is-vertical):not(.wp-block-navigation) {
         flex-direction: row-reverse !important;
     }
-    &.is-layout-flex.is-vertical {
+    &.is-layout-flex.is-vertical:not(.wp-block-navigation) {
         flex-direction: column-reverse !important;
     }
 
@@ -67,6 +67,7 @@ $device: "_DEVICE_";
     &.is-layout-flex {
         &:not(.is-vertical),
         &.is-horizontal,
+        &:not(.is-vertical).wp-block-navigation .wp-block-navigation__container,
         &.is-horizontal.wp-block-navigation .wp-block-navigation__container {
             justify-content: var(--tzm-responsive--justify--#{$device}) !important;
         }
@@ -74,13 +75,6 @@ $device: "_DEVICE_";
         &.is-vertical,
         &.is-vertical.wp-block-navigation .wp-block-navigation__container {
             align-items: var(--tzm-responsive--justify--#{$device}) !important;
-        }
-
-        &.wp-block-navigation.is-responsive .is-menu-open {
-            .wp-block-navigation__container,
-            .wp-block-navigation__responsive-container-content {
-                --navigation-layout-justification-setting: var(--tzm-responsive--justify--#{$device}) !important;
-            }
         }
     }
 }
@@ -136,10 +130,14 @@ $device: "_DEVICE_";
 
 // Font size
 [style*="--tzm-responsive--font-size--#{$device}"] {
-    font-size: var(--tzm-responsive--font-size--#{$device}) !important;
+    &.wp-block, // Editor only
+    & {
+        font-size: var(--tzm-responsive--font-size--#{$device}) !important;
+    }
 
     > figcaption,
-    &.wp-block-buttons .wp-block-button__link {
+    &.wp-block-buttons .wp-block-button__link,
+    &.wp-block-button .wp-block-button__link {
         font-size: inherit;
     }
 }
@@ -194,7 +192,7 @@ $device: "_DEVICE_";
 
 // Mobile specific styles
 /*
-.tzm-responsive__reverse-_DEVICE_.is-layout-flex:not(.wp-block-group):not(.is-not-stacked-on-mobile) {
+.tzm-responsive__reverse-_DEVICE_.is-layout-flex:not(.wp-block-group):not(.wp-block-navigation):not(.is-not-stacked-on-mobile) {
     flex-direction: column-reverse !important;
 }
 */

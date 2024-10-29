@@ -32,6 +32,14 @@ The provided options allow you to customize how your blocks appear on different 
 
 With its extensive feature set, TZM Responsive Block Controls provides everything you need to create stunning and visually appealing designs across different devices.
 
+=== Source Code ===
+
+The source code for TZM Responsive Block Controls is now available on GitHub! 
+Follow the development, report issues, and get involved in improving the plugin. We welcome contributions, feedback, and feature requests from the community. 
+
+* [View on GitHub](https://github.com/jakobwiens7/tzm-responsive-block-controls)
+
+
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/tzm-responsive-block-controls` directory, or install the plugin through the WordPress plugins screen directly.
@@ -55,8 +63,8 @@ Inline Styles with CSS Variables: For features that require specific values, suc
 Note: This plugin relies on `!important` declarations to ensure styles are applied correctly. While the use of `!important` is typically discouraged, it is necessary in certain cases to achieve consistent, responsive behavior across devices. Please keep this in mind.
 
 = Does TZM Responsive Block Controls work with third-party blocks? =
-While it is primarily designed to target core blocks, some responsive features should also work with third-party blocks. However, third-party blocks may not always behave the same way as core blocks, which can lead to unexpected results or prevent the responsive controls from taking effect. This issue can also arise with core blocks when using plugins or themes that modify how those blocks function or are styled.
-We plan to fully support other popular plugins, such as WooCommerce blocks and more. Feel free to suggest blocks or plugins you think *TZM Responsive Block Controls* should support - maybe we'll consider that for widely used and requested plugins :)
+While it is primarily designed to target WordPress core blocks, some responsive features should also work with third-party blocks. However, third-party blocks may not always behave the same way as core blocks, which can lead to unexpected results or prevent the responsive controls from taking effect.
+Feel free to suggest blocks or plugins you think *TZM Responsive Block Controls* should support :)
 
 = Can i define my own breakpoints? =
 Yes, you can easily customize the default breakpoints used by TZM Responsive Block Controls. Simply add the following code to your theme's functions.php file:
@@ -99,8 +107,11 @@ However, your content will remain intact, and the blocks will revert to their de
 == Changelog ==
 
 == 1.0.2 ==
-- Added "Justification" and "Reverse block" support for "Social Links" block
+- Added "Justification" and "Reverse" support for "Social Links" block
+- Minor bugfixes
 - Added changelog.txt
+- Updated readme.txt
+- Migrated source code to [GitHub](https://github.com/jakobwiens7/tzm-responsive-block-controls)
 
 = 1.0.1 = 
 - Fixed "Reverse block" functionality when "Stack on mobile" is enabled
