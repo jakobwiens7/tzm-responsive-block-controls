@@ -10,10 +10,13 @@ const { assign, kebabCase, merge } = lodash;
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
+import { useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 
 import {
 	InspectorControls,	
-	useSettings
+	useSettings,
+	useBlockEditContext 
 } from '@wordpress/block-editor';
 
 import {
@@ -27,7 +30,7 @@ import {
  */
 import { cleanEmptyObject } from './_utils';
 
-import GeneralLayoutPanel from './general-layout-panel';
+import LayoutPanel from './layout-panel';
 import TypographyPanel from './typography-panel';
 import DimensionsPanel from './dimensions-panel';
 
@@ -80,13 +83,35 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 		const {
 			name,
 			attributes,
-			setAttributes
+			setAttributes,
+			clientId,
+			isSelected
 		} = props;
 		
 		const {
 			responsiveControls
 		} = attributes;
 
+		// WIP >>>
+		const isFlex = attributes.layout?.type === 'flex' || false;
+		/*const isParentFlex = useSelect((select) => {
+			const { getBlockRootClientId, getBlock, getBlockAttributes } = select('core/block-editor');
+			const parentClientId = getBlockRootClientId(clientId);
+	
+			if (!parentClientId) return false;
+	
+			const parentBlock = getBlock(parentClientId);
+			return parentBlock?.attributes?.layout?.type === "flex" || false;
+		}, [clientId]);*/
+		const isParentBlock = useSelect((select) => {
+			const { getBlockRootClientId, getBlock, getBlockAttributes } = select('core/block-editor');
+			const parentClientId = getBlockRootClientId(clientId);
+	
+			if (!parentClientId) return false;
+	
+			return getBlock(parentClientId) || false;
+		}, [clientId]);
+		// <<< WIP
 
 		function ResponsiveBlockControls( {	device } ) {
 
@@ -105,14 +130,22 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 					name === 'core/media-text' ||
 					name === 'tzm/section'
 				),
+				flexWidth: (
+					isParentBlock?.attributes?.layout?.type === "flex" ||
+					name === 'core/column' ||
+					name === 'core/button' ||
+					name === 'core/social-link' ||
+					name === 'core/navigation-item' ||
+					(name === 'core/image' && isParentBlock?.name === 'core/gallery')
+				),
 				justify: (
-					attributes.layout?.type === 'flex' ||
+					isFlex ||
 					name === 'core/navigation' ||
 					name === 'core/buttons' ||
 					name === 'core/social-links'
 				),
 				reverse: (
-					attributes.layout?.type === 'flex' ||
+					isFlex ||
 					name === 'core/navigation' ||
 					name === 'core/columns' ||
 					name === 'core/media-text' ||
@@ -140,18 +173,35 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 				setAttributes({ responsiveControls: cleanResponsiveControls });
 			}
 
+			/**
+			 * Handle deprecated controls / attributes
+			 */
+			useEffect(() => {
+				// Full width > Width
+				if (!! responsiveControls?.[device]?.fullWidth) {
+					console.log( 'TZM Responsive Block Controls: "Full width" control is deprecated. Converting attribute...' );
+
+					updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
+						fullWidth: undefined,
+						width: '100%'
+					}});
+				}
+			});
+
 
 			return (
-				<>					
-					<GeneralLayoutPanel 
+				<>		
+					<LayoutPanel 
 						isBlockType={isBlockType} 
+						isParentBlock={isParentBlock} 
 						device={device} 
 						updateAttribute={updateResponsiveAttribute}
 						responsiveControls={responsiveControls}
 					/>
 					{ !! isBlockType.typography && (
 						<TypographyPanel 
-							isBlockType={isBlockType} 
+							isBlockType={isBlockType}  
+							isParentBlock={isParentBlock} 
 							units={units}
 							device={device} 
 							updateAttribute={updateResponsiveAttribute}
@@ -159,7 +209,8 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 						/>
 					) }
 					<DimensionsPanel
-						isBlockType={isBlockType}
+						isBlockType={isBlockType} 
+						isParentBlock={isParentBlock} 
 						units={units}
 						device={device}
 						updateAttribute={updateResponsiveAttribute}
@@ -253,7 +304,7 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 						switch (option) {
 							case 'hidden':
 							case 'reverse':
-							case 'fullWidth':
+							//case 'fullWidth':
 								classes.push(`tzm-responsive__${kebabCase(option)}__${device}`);
 								break;
 							
@@ -304,6 +355,8 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 							case 'justify':
 							case 'textAlign':
 							case 'fontSize':
+							case 'width':
+							case 'customWidth':
 							case 'height':
 								if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
 								break;

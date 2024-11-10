@@ -9,7 +9,7 @@ $device: "_DEVICE_";
     display: none !important;
 }
 
-// Full width
+// Full width **Deprecated**
 .tzm-responsive__full-width__#{$device} {
     width: 100% !important;
 
@@ -30,10 +30,6 @@ $device: "_DEVICE_";
         height: auto !important;
     }
 }
-
-/**
- * FLEXBOX SETTINGS
- */
 
 // Reverse
 .tzm-responsive__reverse__#{$device} {
@@ -138,7 +134,7 @@ $device: "_DEVICE_";
     > figcaption,
     &.wp-block-buttons .wp-block-button__link,
     &.wp-block-button .wp-block-button__link {
-        font-size: inherit;
+        font-size: inherit !important;
     }
 }
 
@@ -180,7 +176,48 @@ $device: "_DEVICE_";
     margin-left: var(--tzm-responsive--margin-left--#{$device}) !important;
 }
 
-// Height
+// (Flex) Width
+[style*="--tzm-responsive--width--#{$device}"] {
+    .is-layout-flex > & {
+        box-sizing: border-box;
+        flex-basis: calc(
+            (1% * var(--tzm-responsive--width--#{$device})) -
+                var(--tzm-responsive--block-gap--#{$device}, var(--wp--style--block-gap, 0.5em)) *
+                (1 - var(--tzm-responsive--width--#{$device}) / 100)
+        ) !important;
+    }
+
+    .wp-block-columns:has(&),
+    .wp-block-group.is-layout-flex.is-nowrap:has(&) {
+        flex-wrap: wrap !important;
+    }
+    &.wp-block-column {
+        flex-grow: 0 !important;
+    }
+
+    .wp-block-button__link {
+        width: 100%;
+    }
+
+    // Gallery Image **experimental**
+    .wp-block-gallery.has-nested-images &.wp-block-image {
+        --tzm-responsive--block-gap--#{$device}: var(--wp--style--unstable-gallery-gap);
+        flex-grow: unset;
+    }
+}
+
+// Custom Width
+[style*="--tzm-responsive--custom-width--#{$device}"] {
+    width: var(--tzm-responsive--custom-width--#{$device}) !important;
+
+    &.wp-block-site-logo > *,
+    &.wp-block-image > * {
+        width: inherit !important;
+        height: auto !important;
+    }
+}
+
+// Minimum height
 [style*="--tzm-responsive--height--#{$device}"] {
     min-height: var(--tzm-responsive--height--#{$device}) !important;
 }

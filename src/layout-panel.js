@@ -7,8 +7,8 @@ import {
     BaseControl,
 	Button, 
 	ButtonGroup,
+    PanelRow,
 	ToggleControl,
-	//Dashicon,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
@@ -24,24 +24,32 @@ import {
 /**
  * Internal Dependencies
  */
-//import { cleanEmptyObject } from './_utils';
+import { addFallbackUnit } from './_utils';
 
 
-export default function GeneralLayoutPanel({
+export default function LayoutPanel({
     isBlockType,
+    isParentBlock,
     device,
     responsiveControls,
     updateAttribute
 }) {
-        
+
     const isHidden = !! responsiveControls?.[device]?.hidden;
     const setHidden = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
         hidden: newValue 
     }});
-    
-    const isFullWidth = !! responsiveControls?.[device]?.fullWidth;
+
+    // WIP: 'Full Width' is now deprecated
+    /*const isFullWidth = !! responsiveControls?.[device]?.fullWidth;
     const setFullWidth = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
         fullWidth: newValue 
+    }});*/
+
+    const isWidth = !! responsiveControls?.[device]?.width;
+    const setWidth = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
+        width: newValue,
+        customWidth: undefined
     }});
 
     const isReverse = !! responsiveControls?.[device]?.reverse;
@@ -60,39 +68,63 @@ export default function GeneralLayoutPanel({
     }});
 
     const resetAll = () => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
-        hidden: undefined, 
-        fullwidth: undefined, 
+        width: undefined,
+        //fullwidth: undefined, 
         reverse: undefined,
         justify: undefined
     }});
-    
+
+    // WIP
+    //console.log(responsiveControls?.[device]);
+    // WIP
 
     return (
-        <ToolsPanel label={ __( 'General & Layout', "tzm-responsive-block-controls" ) } resetAll={ resetAll } >
-        
-            <ToolsPanelItem isShownByDefault
+    <>
+        <PanelRow className="responsive-hide-control">
+            <ToggleControl __nextHasNoMarginBottom
                 label={ __('Hide block', "tzm-responsive-block-controls") }
-                hasValue={ () => isHidden }
-                onDeselect={ () => setHidden() }
-            >
-                <ToggleControl
-                    label={ __('Hide block', "tzm-responsive-block-controls") }
-                    checked={ isHidden }
-                    onChange={ setHidden }
-                />
-            </ToolsPanelItem>
+                checked={ isHidden }
+                onChange={ setHidden }
+            />
+        </PanelRow>
 
+        { (!! isBlockType.flexWidth || !! isBlockType.reverse || !! isBlockType.justify || !! isBlockType.image) && (
+        <ToolsPanel label={ __( 'Layout settings', "tzm-responsive-block-controls" ) } resetAll={ resetAll } >
+
+            { !! isBlockType.flexWidth && (
             <ToolsPanelItem isShownByDefault
-                label={ __("Full width", "tzm-responsive-block-controls") }
-                hasValue={ () => isFullWidth }
-                onDeselect={ () => setFullWidth() }
+                label={ __("Width", "tzm-responsive-block-controls") } 
+                hasValue={ () => isWidth }
+                onDeselect={ () => setWidth() }
             >
-                <ToggleControl
-                    label={ __("Full width", "tzm-responsive-block-controls") }
-                    checked={ isFullWidth }
-                    onChange={ setFullWidth }
-                />
+                <ButtonGroup>
+                    <Button __next40pxDefaultSize
+                        size="small"
+                        label={ __("50%", "tzm-responsive-block-controls") }
+                        isPressed={ responsiveControls?.[device]?.width == 50 }
+                        onClick={ () => setWidth(responsiveControls?.[device]?.width == 50 ? undefined : 50) }
+                    >{ __("50%", "tzm-responsive-block-controls") }</Button>
+                    <Button __next40pxDefaultSize
+                        size="small"
+                        label={ __("66%", "tzm-responsive-block-controls") }
+                        isPressed={ responsiveControls?.[device]?.width == 66 }
+                        onClick={ () => setWidth(responsiveControls?.[device]?.width == 66 ? undefined : 66) }
+                    >{ __("66%", "tzm-responsive-block-controls") }</Button>
+                    <Button __next40pxDefaultSize
+                        size="small"
+                        label={ __("75%", "tzm-responsive-block-controls") }
+                        isPressed={ responsiveControls?.[device]?.width == 75 }
+                        onClick={ () => setWidth(responsiveControls?.[device]?.width == 75 ? undefined : 75) }
+                    >{ __("75%", "tzm-responsive-block-controls") }</Button>
+                    <Button __next40pxDefaultSize
+                        size="small"
+                        label={ __("100%", "tzm-responsive-block-controls") }
+                        isPressed={ responsiveControls?.[device]?.width == 100 }
+                        onClick={ () => setWidth(responsiveControls?.[device]?.width == 100 ? undefined : 100) }
+                    >{ __("100%", "tzm-responsive-block-controls") }</Button>
+                </ButtonGroup>
             </ToolsPanelItem>
+        ) }
 
         { !! isBlockType.reverse && (
             <ToolsPanelItem isShownByDefault
@@ -143,7 +175,7 @@ export default function GeneralLayoutPanel({
                 </BaseControl>
             </ToolsPanelItem>
         ) }
-        { !! isBlockType.image && (
+        { !! isBlockType.image && isParentBlock?.name !== 'core/gallery' && (
             <ToolsPanelItem isShownByDefault
                 label={ __("Image alignment", "tzm-responsive-block-controls") }
                 hasValue={ () => isImageAlign }
@@ -173,5 +205,7 @@ export default function GeneralLayoutPanel({
             </ToolsPanelItem>
         ) }
     </ToolsPanel>
+    ) }
+    </>
     );
 }

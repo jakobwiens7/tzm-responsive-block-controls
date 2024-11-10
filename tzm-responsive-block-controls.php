@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			1.0.2
+ * Version:			1.0.3
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
@@ -38,6 +38,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
 
         public function __construct()
         {
+
             // Load plugin textdomain
             add_action('plugins_loaded', array($this, 'load_textdomain'));
 
@@ -226,7 +227,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                             // Collect classes
                         case 'hidden':
                         case 'reverse':
-                        case 'fullWidth':
+                            //case 'fullWidth':
                             $classes[] = 'tzm-responsive__' . _wp_to_kebab_case($option) . '__' . $device;
                             break;
 
@@ -254,6 +255,8 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                         case 'justify':
                         case 'textAlign':
                         case 'fontSize':
+                        case 'width':
+                        case 'customWidth':
                         case 'height':
                             $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ':' . $value;
                     }

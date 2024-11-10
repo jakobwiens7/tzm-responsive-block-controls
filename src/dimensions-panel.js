@@ -4,6 +4,7 @@
 import { __ } from '@wordpress/i18n';
 
 import {
+    __experimentalUnitControl as UnitControl,
     __experimentalBoxControl as BoxControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
@@ -61,6 +62,12 @@ export default function DimensionsPanel({
             margin: validateBoxValue(newValue),
         }});
 
+    const isCustomWidth = !! responsiveControls?.[device]?.customWidth;
+    const setCustomWidth = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
+        customWidth: addFallbackUnit(newValue),
+        width: undefined
+    }});
+
     const isHeight = !! responsiveControls?.[device]?.height;
     const setHeight = (newValue) => 
         updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
@@ -76,6 +83,7 @@ export default function DimensionsPanel({
     const resetAll = () => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
         padding: undefined,
         margin: undefined,
+        customWidth: undefined,
         height: undefined,
         blockGap: undefined
     }});
@@ -130,8 +138,21 @@ export default function DimensionsPanel({
                 />
             </ToolsPanelItem>
 
+            <ToolsPanelItem 
+                label={ __("Width", "tzm-responsive-block-controls") }
+                hasValue={ () => isCustomWidth }
+                onDeselect={ () => setCustomWidth() }
+            >
+                <UnitControl __next40pxDefaultSize
+                    label={ __("Custom width", "tzm-responsive-block-controls") }
+                    min={0}
+                    onChange={ (newValue) => setCustomWidth(newValue) }
+                    value={ responsiveControls?.[device]?.customWidth }
+                />
+            </ToolsPanelItem>
+
             <ToolsPanelItem
-                label={ __("Minimum height") }
+                label={ __("Height") }
                 hasValue={ () => isHeight }
                 onDeselect={ () => setHeight() }
             >

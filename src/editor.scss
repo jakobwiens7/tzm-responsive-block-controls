@@ -2,8 +2,21 @@
     .components-tab-panel__tabs {
         justify-content: space-evenly;
     }
-    .responsive-controls-tab-panel .components-tab-panel__tabs-item:not(:hover) {
-        color: #666666;
+    .responsive-controls-tab-panel {
+        .components-tab-panel__tabs {
+            background: #78a1bd14;
+            border-radius: 8px;
+        }
+        .components-tab-panel__tabs-item {
+            flex-grow: 1;
+
+            &:not(:hover) {
+                color: #666666;
+            }
+            &.is-active {
+                background: #78a1bd2b;
+            }
+        }
     }
     &.has-active-phone-options .responsive-controls-tab-panel .tab-phone:not(:hover),
     &.has-active-tablet-options .responsive-controls-tab-panel .tab-tablet:not(:hover),
@@ -32,6 +45,13 @@
 
     .components-toggle-control {
         margin-block: 5px;
+    }
+
+    .responsive-hide-control {
+        margin-block: 20px 10px;
+    }
+    .responsive-width-control {
+        margin-block: 10px 15px;
     }
 
     [id^="inspector-box-control"].components-grid,
