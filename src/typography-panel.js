@@ -12,18 +12,17 @@ import {
     __experimentalUnitControl as UnitControl,
 } from '@wordpress/components';
 
+
 /**
  * Internal Dependencies
  */
 import { addFallbackUnit } from './_utils';
 
-export default function TypographyPanel({
-    isBlockType,
-    units,
-    device,
-    responsiveControls,
-    updateAttribute
-}) {
+
+export default function TypographyPanel({props}) {
+
+    const { device, attributes, updateAttribute, hasBlock, units } = props;
+    const { responsiveControls } = attributes;
 
     const isTextAlign = !! responsiveControls?.[device]?.textAlign;
     const setTextAlign = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
@@ -44,38 +43,41 @@ export default function TypographyPanel({
     return (
         <ToolsPanel label={ __( "Typography" ) } resetAll={ resetAll } >
 
-            <ToolsPanelItem isShownByDefault
-                label={ __('Text alignment', "tzm-responsive-block-controls") }
-                hasValue={ () => isTextAlign }
-                onDeselect={ () => setTextAlign() }
-            >
-                <BaseControl __nextHasNoMarginBottom label={ __("Text alignment", "tzm-responsive-block-controls") }>
-                    <ButtonGroup>
-                        <Button __next40pxDefaultSize icon="editor-alignleft" 
-                            label={ __("Align text left") }
-                            isPressed={ responsiveControls?.[device]?.textAlign == 'left' }
-                            onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'left' ? undefined : 'left') }
-                        />
-                        <Button __next40pxDefaultSize icon="editor-aligncenter" 
-                            label={ __("Align text center") }
-                            isPressed={ responsiveControls?.[device]?.textAlign == 'center' }
-                            onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'center' ? undefined : 'center') }
-                        />
-                        <Button __next40pxDefaultSize icon="editor-alignright" 
-                            label={ __("Align text right") }
-                            isPressed={ responsiveControls?.[device]?.textAlign == 'right' }
-                            onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'right' ? undefined : 'right') }
-                        />
-                        <Button __next40pxDefaultSize icon="editor-justify" 
-                            label={ __("Align text justify", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.textAlign == 'justify' }
-                            onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'justify' ? undefined : 'justify') }
-                        />
-                    </ButtonGroup>
-                </BaseControl>
-            </ToolsPanelItem>
+            { hasBlock.textAlign && (
+                <ToolsPanelItem isShownByDefault
+                    label={ __('Text alignment', "tzm-responsive-block-controls") }
+                    hasValue={ () => isTextAlign }
+                    onDeselect={ () => setTextAlign() }
+                >
+                    <BaseControl __nextHasNoMarginBottom label={ __("Text alignment", "tzm-responsive-block-controls") }>
+                        <ButtonGroup>
+                            <Button __next40pxDefaultSize icon="editor-alignleft" 
+                                label={ __("Align text left") }
+                                isPressed={ responsiveControls?.[device]?.textAlign == 'left' }
+                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'left' ? undefined : 'left') }
+                            />
+                            <Button __next40pxDefaultSize icon="editor-aligncenter" 
+                                label={ __("Align text center") }
+                                isPressed={ responsiveControls?.[device]?.textAlign == 'center' }
+                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'center' ? undefined : 'center') }
+                            />
+                            <Button __next40pxDefaultSize icon="editor-alignright" 
+                                label={ __("Align text right") }
+                                isPressed={ responsiveControls?.[device]?.textAlign == 'right' }
+                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'right' ? undefined : 'right') }
+                            />
+                            <Button __next40pxDefaultSize icon="editor-justify" 
+                                label={ __("Align text justify", "tzm-responsive-block-controls") }
+                                isPressed={ responsiveControls?.[device]?.textAlign == 'justify' }
+                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'justify' ? undefined : 'justify') }
+                            />
+                        </ButtonGroup>
+                    </BaseControl>
+                </ToolsPanelItem>
+            ) }
 
-        <ToolsPanelItem isShownByDefault
+        { hasBlock.fontSize && (
+            <ToolsPanelItem
                 label={ __("Font size") }
                 hasValue={ () => isFontSize }
                 onDeselect={ () => setFontSize() }
@@ -87,6 +89,7 @@ export default function TypographyPanel({
                     units={ units }
                 />
             </ToolsPanelItem>
+        ) }
 
         </ToolsPanel>
     );

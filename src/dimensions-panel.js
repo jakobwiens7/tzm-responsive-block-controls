@@ -4,7 +4,6 @@
 import { __ } from '@wordpress/i18n';
 
 import {
-    __experimentalUnitControl as UnitControl,
     __experimentalBoxControl as BoxControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
@@ -12,40 +11,17 @@ import {
 
 import { HeightControl } from '@wordpress/block-editor';
 
+
 /**
  * Internal Dependencies
  */
-import { addFallbackUnit, splitStyleValue } from './_utils';
+import { addFallbackUnit, splitStyleValue, validateBoxValue } from './_utils';
 
 
-// Validates and ensures that box-related values have the appropriate fallback units.
-function validateBoxValue( value ) {       
-	// Handle object with top, right, bottom, left or a single value
-	if ( typeof value === 'object' && value !== null ) {
-		const paddedVal = {};
+export default function DimensionsPanel({props}) {
 
-		// Ensure that each side has a fallback unit
-		for (let side in value) {
-			paddedVal[side] = addFallbackUnit(value[side]);
-		}
-
-		// Check if any of the box sides have values, otherwise set to undefined
-		return Object.values(paddedVal).some(val => val !== undefined) ? paddedVal : undefined;
-
-	} else {
-		// Ensure that the single padding/margin value has a fallback unit
-		return addFallbackUnit(value);
-	}
-}
-
-
-export default function DimensionsPanel({
-    isBlockType,
-    units,
-    device,
-    responsiveControls,
-    updateAttribute
-}) {
+    const { device, attributes, updateAttribute, hasBlock, hasInnerBlocks, units } = props;
+    const { responsiveControls } = attributes;
 
     const paddingValues = splitStyleValue( responsiveControls?.[device]?.padding );
     const marginValues = splitStyleValue( responsiveControls?.[device]?.margin );
@@ -62,16 +38,10 @@ export default function DimensionsPanel({
             margin: validateBoxValue(newValue),
         }});
 
-    const isCustomWidth = !! responsiveControls?.[device]?.customWidth;
-    const setCustomWidth = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
-        customWidth: addFallbackUnit(newValue),
-        width: undefined
-    }});
-
-    const isHeight = !! responsiveControls?.[device]?.height;
-    const setHeight = (newValue) => 
+    const isMinHeight = !! responsiveControls?.[device]?.minHeight;
+    const setMinHeight = (newValue) => 
         updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
-            height: addFallbackUnit(newValue),
+            minHeight: addFallbackUnit(newValue),
         }});
 
     const isBlockGap = !! responsiveControls?.[device]?.blockGap;
@@ -91,77 +61,72 @@ export default function DimensionsPanel({
 
     return (
         <ToolsPanel label={ __("Dimensions") } resetAll={ resetAll } >
-            
-            <ToolsPanelItem isShownByDefault
-                label={ __("Padding") }
-                hasValue={ () => isPadding }
-                onDeselect={ () => setPadding() }
-            >
-                <BoxControl __next40pxDefaultSize
-                    allowReset={ false }
+
+            { hasBlock.padding && (
+                <ToolsPanelItem isShownByDefault
                     label={ __("Padding") }
-                    values={ paddingValues }
-                    units={ units }
-                    onChange={ setPadding }
-                />
-            </ToolsPanelItem>
+                    hasValue={ () => isPadding }
+                    onDeselect={ () => setPadding() }
+                >
+                    <BoxControl __next40pxDefaultSize
+                        allowReset={ false }
+                        label={ __("Padding") }
+                        values={ paddingValues }
+                        units={ units }
+                        onChange={ setPadding }
+                    />
+                </ToolsPanelItem>
+            ) }
 
-            <ToolsPanelItem isShownByDefault
-                label={ __("Margin") }
-                hasValue={ () => isMargin }
-                onDeselect={ () => setMargin() }
-            >
-                <BoxControl __next40pxDefaultSize
-                    allowReset={ false }
+            { hasBlock.margin && (
+                <ToolsPanelItem isShownByDefault
                     label={ __("Margin") }
-                    inputProps={{ min: -999 }}
-                    values={ marginValues }
-                    units={ units }
-                    onChange={ setMargin }
-                    sides={ isBlockType.container ? ['top', 'bottom']: null }
-                />
-            </ToolsPanelItem>
+                    hasValue={ () => isMargin }
+                    onDeselect={ () => setMargin() }
+                >
+                    <BoxControl __next40pxDefaultSize
+                        allowReset={ false }
+                        label={ __("Margin") }
+                        inputProps={{ min: -999 }}
+                        values={ marginValues }
+                        units={ units }
+                        onChange={ setMargin }
+                        sides={ hasInnerBlocks ? ['top', 'bottom']: null }
+                    />
+                </ToolsPanelItem>
+            ) }
 
-            <ToolsPanelItem
-                label={ __("Block spacing") }
-                hasValue={ () => isBlockGap }
-                onDeselect={ () => setBlockGap() }
-            >
-                <BoxControl __next40pxDefaultSize
-                    id="responsive-block-gap-control"
-                    allowReset={ false }
+            { hasBlock.blockGap && (
+                <ToolsPanelItem
                     label={ __("Block spacing") }
-                    values={ responsiveControls?.[device]?.blockGap }
-                    units={ units }
-                    onChange={ setBlockGap }
-                    sides={ ['top'] }
-                />
-            </ToolsPanelItem>
+                    hasValue={ () => isBlockGap }
+                    onDeselect={ () => setBlockGap() }
+                >
+                    <BoxControl __next40pxDefaultSize
+                        id="responsive-block-gap-control"
+                        allowReset={ false }
+                        label={ __("Block spacing") }
+                        values={ responsiveControls?.[device]?.blockGap }
+                        units={ units }
+                        onChange={ setBlockGap }
+                        sides={ ['top'] }
+                    />
+                </ToolsPanelItem>
+            ) }
 
-            <ToolsPanelItem 
-                label={ __("Width", "tzm-responsive-block-controls") }
-                hasValue={ () => isCustomWidth }
-                onDeselect={ () => setCustomWidth() }
-            >
-                <UnitControl __next40pxDefaultSize
-                    label={ __("Custom width", "tzm-responsive-block-controls") }
-                    min={0}
-                    onChange={ (newValue) => setCustomWidth(newValue) }
-                    value={ responsiveControls?.[device]?.customWidth }
-                />
-            </ToolsPanelItem>
-
-            <ToolsPanelItem
-                label={ __("Height") }
-                hasValue={ () => isHeight }
-                onDeselect={ () => setHeight() }
-            >
-                <HeightControl
+            { hasBlock.minHeight && (
+                <ToolsPanelItem
                     label={ __("Minimum height") }
-                    onChange={ setHeight }
-                    value={ responsiveControls?.[device]?.height }
-                />
-            </ToolsPanelItem>
+                    hasValue={ () => isMinHeight }
+                    onDeselect={ () => setMinHeight() }
+                >
+                    <HeightControl
+                        label={ __("Minimum height") }
+                        onChange={ setMinHeight }
+                        value={ responsiveControls?.[device]?.minHeight }
+                    />
+                </ToolsPanelItem>
+            ) }
 
         </ToolsPanel>
     );

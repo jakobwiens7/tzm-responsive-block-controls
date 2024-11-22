@@ -12,11 +12,12 @@ import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
+import { useEntityProp } from '@wordpress/core-data';
 
 import {
 	InspectorControls,	
 	useSettings,
-	useBlockEditContext 
+	//useBlockEditContext 
 } from '@wordpress/block-editor';
 
 import {
@@ -28,9 +29,24 @@ import {
 /**
  * Internal Dependencies
  */
-import { cleanEmptyObject } from './_utils';
+import { 
+	cleanEmptyObject,
+	hasBlockReverse, 
+	hasBlockJustify, 
+	hasBlockWidth, 
+	hasBlockMediaWidth, 
+	hasBlockMediaAlign, 
+	hasBlockFocalPoint,
+	hasBlockTextAlign,
+	hasBlockFontSize,
+	hasBlockPadding,
+	hasBlockMargin,
+	hasBlockGap,
+	hasBlockMinHeight
+} from './_utils';
 
-import LayoutPanel from './layout-panel';
+import GeneralPanel from './general-panel';
+import MediaPanel from './media-panel';
 import TypographyPanel from './typography-panel';
 import DimensionsPanel from './dimensions-panel';
 
@@ -53,10 +69,8 @@ import './style.scss';
  * @return {Object} settings Modified settings.
  */
 function addResponsiveAttributes( settings ) {
-	
 	// check if object exists for old Gutenberg version compatibility
-	if ( typeof settings.attributes !== 'undefined' ) {
-		
+	if (typeof settings.attributes !== 'undefined') {
 		return assign( {}, settings, {
 			attributes: merge(settings.attributes, {
 				responsiveControls: {
@@ -81,145 +95,149 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 	return (props) => {
 
 		const {
-			name,
 			attributes,
 			setAttributes,
 			clientId,
-			isSelected
+			isSelected,
+			context: { postId, postType },
 		} = props;
 		
 		const {
 			responsiveControls
-		} = attributes;
+		} = attributes;		
 
-		// WIP >>>
-		const isFlex = attributes.layout?.type === 'flex' || false;
-		/*const isParentFlex = useSelect((select) => {
-			const { getBlockRootClientId, getBlock, getBlockAttributes } = select('core/block-editor');
+
+		// Disable responsive controls panel in unsupported blocks
+		if (
+			props.name === "core/more" ||
+			props.name === "core/nextpage"
+		) {
+			return <BlockEdit {...props} />
+		}
+
+		// Get additional block details
+		const { parentProps, hasInnerBlocks } = useSelect((select) => {
+			const { getBlockRootClientId, getBlock, getBlockListSettings } = select('core/block-editor');
 			const parentClientId = getBlockRootClientId(clientId);
-	
-			if (!parentClientId) return false;
-	
-			const parentBlock = getBlock(parentClientId);
-			return parentBlock?.attributes?.layout?.type === "flex" || false;
-		}, [clientId]);*/
-		const isParentBlock = useSelect((select) => {
-			const { getBlockRootClientId, getBlock, getBlockAttributes } = select('core/block-editor');
-			const parentClientId = getBlockRootClientId(clientId);
-	
-			if (!parentClientId) return false;
-	
-			return getBlock(parentClientId) || false;
+
+			const parentProps = getBlock(parentClientId) || false;
+			const hasInnerBlocks = !! getBlockListSettings(clientId) || false;
+
+			return { parentProps, hasInnerBlocks };
 		}, [clientId]);
-		// <<< WIP
 
+		// Get featured image
+		const [ featuredImage ] = useEntityProp(
+			'postType',
+			postType,
+			'featured_media',
+			postId
+		);
+
+		// Get registered units
+		const [ availableUnits ] = useSettings( 'spacing.units' );
+		const units = useCustomUnits( {
+			availableUnits: availableUnits || [ 'px', 'em', 'rem', 'vw', 'vh', '%' ]
+		} );
+
+
+		// ResponsiveBlockControls component
 		function ResponsiveBlockControls( {	device } ) {
 
-			// Get registered units
-			const [ availableUnits ] = useSettings( 'spacing.units' );
-			const units = useCustomUnits( {
-				availableUnits: availableUnits || [ 'px', 'em', 'rem', 'vw', 'vh', '%' ]
-			} );
-
-			// Define block types
-			const isBlockType = {
-				container: (
-					name === 'core/group' ||
-					name === 'core/columns' ||
-					name === 'core/cover' ||
-					name === 'core/media-text' ||
-					name === 'tzm/section'
-				),
-				flexWidth: (
-					isParentBlock?.attributes?.layout?.type === "flex" ||
-					name === 'core/column' ||
-					name === 'core/button' ||
-					name === 'core/social-link' ||
-					name === 'core/navigation-item' ||
-					(name === 'core/image' && isParentBlock?.name === 'core/gallery')
-				),
-				justify: (
-					isFlex ||
-					name === 'core/navigation' ||
-					name === 'core/buttons' ||
-					name === 'core/social-links'
-				),
-				reverse: (
-					isFlex ||
-					name === 'core/navigation' ||
-					name === 'core/columns' ||
-					name === 'core/media-text' ||
-					name === 'core/gallery' ||
-					name === 'core/buttons' ||
-					name === 'core/social-links'
-				),
-				image: (
-					name === 'core/site-logo' ||
-					name === 'core/post-featured-image' ||
-					name === 'core/image'
-				),
-				typography: (
-					name !== 'core/site-logo' &&
-					name !== 'core/post-featured-image'
-				)
+			// Define block feature support
+			const hasBlock = {
+				reverse: hasBlockReverse(props),
+				justify: hasBlockJustify(props),
+				width: hasBlockWidth(props, parentProps),
+				mediaWidth: hasBlockMediaWidth(props, parentProps),
+				mediaAlign: hasBlockMediaAlign(props, parentProps),
+				focalPoint: hasBlockFocalPoint(props),
+				textAlign: hasBlockTextAlign(props),
+				fontSize: hasBlockFontSize(props),
+				padding: hasBlockPadding(props),
+				margin: hasBlockMargin(props),
+				blockGap: hasBlockGap(props, parentProps, hasInnerBlocks),
+				minHeight: hasBlockMinHeight(props, parentProps)
 			};
 
 			// Clean and update 'responsiveControls' attribute
 			function updateResponsiveAttribute( updatedResponsiveControls = {} ) {
 				const cleanResponsiveControls = cleanEmptyObject(updatedResponsiveControls);
-
-				//console.log(cleanResponsiveControls);
-
 				setAttributes({ responsiveControls: cleanResponsiveControls });
 			}
 
+
 			/**
-			 * Handle deprecated controls / attributes
+			 * Handle deprecated controls / responsive attributes
 			 */
 			useEffect(() => {
-				// Full width > Width
-				if (!! responsiveControls?.[device]?.fullWidth) {
-					console.log( 'TZM Responsive Block Controls: "Full width" control is deprecated. Converting attribute...' );
+					// Reset responsive attributes if they're not supported
+					const resetAttributes = {};
+					Object.keys(hasBlock).forEach(key => {
 
-					updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
-						fullWidth: undefined,
-						width: '100%'
-					}});
-				}
+						// TO-DO: Check for values inside objects, e.g. blockGap, margin?, padding?
+						if (!! responsiveControls?.[device]?.[key] && ! hasBlock[key]) {
+							resetAttributes[key] = undefined;
+
+							// WIP >>>
+							console.log("Resetting " + key + " in " + props.name);
+						}
+					});
+					if (Object.keys(resetAttributes).length > 0) {
+						updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], ...resetAttributes }});
+					}
+
+					// Convert 'height' to 'minHeight'
+					if (!! responsiveControls?.[device]?.height) {
+						console.log( 'TZM Responsive Block Controls: "height" attribute is now "minHeight. Converting attribute...' );
+
+						updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], 
+							minHeight: responsiveControls[device].height,
+							height: undefined,
+						}});
+					}
+
+					// Convert 'fullWidth' to 'width'
+					if (!! responsiveControls?.[device]?.fullWidth) {
+						console.log( 'TZM Responsive Block Controls: "Full Width" control is deprecated. Converting attribute...' );
+
+						updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], 
+							fullWidth: undefined,
+							width: 100
+						}});
+					}
 			});
 
+			// Prepare responsive props for sub-components
+			const responsiveProps = { 
+				device,
+				attributes,
+				updateAttribute: (attr) => updateResponsiveAttribute(attr),
+				hasBlock,
+				hasInnerBlocks,
+				featuredImage,
+				units
+			};
 
 			return (
-				<>		
-					<LayoutPanel 
-						isBlockType={isBlockType} 
-						isParentBlock={isParentBlock} 
-						device={device} 
-						updateAttribute={updateResponsiveAttribute}
-						responsiveControls={responsiveControls}
-					/>
-					{ !! isBlockType.typography && (
-						<TypographyPanel 
-							isBlockType={isBlockType}  
-							isParentBlock={isParentBlock} 
-							units={units}
-							device={device} 
-							updateAttribute={updateResponsiveAttribute}
-							responsiveControls={responsiveControls}
-						/>
-					) }
-					<DimensionsPanel
-						isBlockType={isBlockType} 
-						isParentBlock={isParentBlock} 
-						units={units}
-						device={device}
-						updateAttribute={updateResponsiveAttribute}
-						responsiveControls={responsiveControls}
-					/>
-				</>
+			<>	
+				<GeneralPanel props={responsiveProps}/>
+
+				{ (hasBlock.mediaWidth || hasBlock.mediaAlign || hasBlock.focalPoint) && (
+					<MediaPanel props={responsiveProps}/>
+				) }
+
+				{ (hasBlock.textAlign || hasBlock.fontSize) && (
+					<TypographyPanel props={responsiveProps}/>
+				) }
+				{ (hasBlock.padding || hasBlock.margin || hasBlock.blockGap || hasBlock.minHeight) && (
+					<DimensionsPanel props={responsiveProps}/>
+				) }
+			</>
 			);
 		}
 		
+
 		return (
 			<>
 				<BlockEdit {...props} />
@@ -351,13 +369,17 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 									styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value.top;
 								}
 								break;
-							
+							case 'focalPoint':
+								if (typeof value === 'object' && ('x' in value || 'y' in value)) {
+									styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = (value.x ?? 0)*100 + "% " + (value.y ?? 0)*100 + "%";
+								}
+								break;
 							case 'justify':
 							case 'textAlign':
 							case 'fontSize':
 							case 'width':
-							case 'customWidth':
-							case 'height':
+							case 'mediaWidth':
+							case 'minHeight':
 								if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
 								break;
 						}

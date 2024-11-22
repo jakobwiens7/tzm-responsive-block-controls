@@ -29,8 +29,17 @@
 
         .components-tools-panel {
             padding-inline: 0;
-            margin-bottom: 10px;
+            padding-bottom: 0;
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+
+            .components-tools-panel-item:last-child > * {
+                margin-bottom: 10px;
+            }
         }
+
         .components-tools-panel-item {
             display: flex;
             justify-content: space-between;
@@ -47,11 +56,8 @@
         margin-block: 5px;
     }
 
-    .responsive-hide-control {
-        margin-block: 20px 10px;
-    }
-    .responsive-width-control {
-        margin-block: 10px 15px;
+    .components-panel__row:nth-last-child(1 of .components-panel__row) {
+        margin-bottom: 10px;
     }
 
     [id^="inspector-box-control"].components-grid,

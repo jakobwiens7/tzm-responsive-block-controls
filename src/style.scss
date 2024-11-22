@@ -40,11 +40,6 @@ $device: "_DEVICE_";
         flex-direction: column-reverse !important;
     }
 
-    // Media & Text block
-    &.wp-block-media-text {
-        direction: rtl;
-    }
-
     // Navigation block
     &.wp-block-navigation.is-horizontal .wp-block-navigation__container {
         --navigation-layout-direction: row-reverse;
@@ -75,6 +70,10 @@ $device: "_DEVICE_";
     }
 }
 
+/** 
+ * IMAGE SETTINGS
+ */
+
 // Image alignment
 .tzm-responsive__image-align-left__#{$device} {
     text-align: left !important;
@@ -99,9 +98,21 @@ $device: "_DEVICE_";
 }
 [class*="tzm-responsive__image-align-"] {
     // Editor only
+    &.wp-block-avatar > .components-resizable-box__container,
     &.wp-block-site-logo > .components-resizable-box__container,
     &.wp-block-image > .components-resizable-box__container {
         display: inline-block !important;
+    }
+}
+
+// Focal point
+[style*="--tzm-responsive--focal-point--#{$device}"] {
+    &.has-background {
+        background-position: var(--tzm-responsive--focal-point--#{$device}) !important;
+    }
+    img,
+    video {
+        object-position: var(--tzm-responsive--focal-point--#{$device}) !important;
     }
 }
 
@@ -113,7 +124,8 @@ $device: "_DEVICE_";
 [style*="--tzm-responsive--text-align--#{$device}"] {
     text-align: var(--tzm-responsive--text-align--#{$device}) !important;
 
-    & > figcaption {
+    & > figcaption,
+    & > .wp-block-button__link {
         text-align: inherit !important;
     }
 
@@ -139,7 +151,7 @@ $device: "_DEVICE_";
 }
 
 /** 
- * SPACING SETTINGS
+ * DIMENSIONS SETTINGS
  */
 
 // Padding
@@ -178,6 +190,10 @@ $device: "_DEVICE_";
 
 // (Flex) Width
 [style*="--tzm-responsive--width--#{$device}"] {
+    /*:not(.is-layout-flex) > & {
+        width: calc(1% * var(--tzm-responsive--width--#{$device})) !important;
+    }*/
+
     .is-layout-flex > & {
         box-sizing: border-box;
         flex-basis: calc(
@@ -206,25 +222,43 @@ $device: "_DEVICE_";
     }
 }
 
-// Custom Width
-[style*="--tzm-responsive--custom-width--#{$device}"] {
-    width: var(--tzm-responsive--custom-width--#{$device}) !important;
-
+// Media width
+[style*="--tzm-responsive--media-width--#{$device}"] {
+    &.wp-block-post-featured-image,
     &.wp-block-site-logo > *,
-    &.wp-block-image > * {
-        width: inherit !important;
+    &.wp-block-avatar > *,
+    &.wp-block-image > *,
+    &.wp-block-video > * {
+        width: var(--tzm-responsive--media-width--#{$device}) !important;
         height: auto !important;
+
+        img,
+        video {
+            width: 100%;
+        }
     }
 }
 
 // Minimum height
 [style*="--tzm-responsive--height--#{$device}"] {
+    // **Deprecated**
     min-height: var(--tzm-responsive--height--#{$device}) !important;
+}
+[style*="--tzm-responsive--min-height--#{$device}"] {
+    min-height: var(--tzm-responsive--min-height--#{$device}) !important;
+
+    &.wp-block-spacer {
+        height: var(--tzm-responsive--min-height--#{$device}) !important;
+    }
 }
 
 // Block gap
 [style*="--tzm-responsive--block-gap--#{$device}"] {
     gap: var(--tzm-responsive--block-gap--#{$device}) !important;
+
+    > [class*="__inner-container"] > :not(:last-child) {
+        margin-block-end: var(--tzm-responsive--block-gap--#{$device}) !important;
+    }
 }
 
 // Mobile specific styles

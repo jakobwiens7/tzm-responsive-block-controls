@@ -1,6 +1,6 @@
 {
 	"name": "tzm-responsive-block-controls",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Control your block's appearance depending on a device's screen width.",
 	"author": "TezmoMedia - Jakob Wiens",
 	"license": "GPL-2.0-or-later",

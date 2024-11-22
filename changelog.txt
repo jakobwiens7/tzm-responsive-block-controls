@@ -1,3 +1,6 @@
+== 1.0.3 ==
+- Added "Width" controls
+
 == 1.0.2 ==
 - Added "Justification" and "Reverse" support for "Social Links" block
 - Minor bugfixes

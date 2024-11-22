@@ -11,33 +11,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2022-10-10T15:43:51+00:00\n"
-"PO-Revision-Date: 2024-09-30 09:22+0000\n"
+"PO-Revision-Date: 2024-11-22 08:14+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: tzm-responsive-block-controls\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Version: 2.6.11; wp-6.6.2"
 
-#: build/tzm-responsive-block-controls.js:1 src/image-typography-panel.js:61
-msgid "Align image centered"
-msgstr "Bild zentriert ausrichten"
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:105
+#: src/general-panel.js:108 src/layout-panel.js:105 src/layout-panel.js:108
+msgid "100%"
+msgstr "100%"
 
-#: build/tzm-responsive-block-controls.js:1 src/image-typography-panel.js:56
-msgid "Align image left"
-msgstr "Bild links ausrichten"
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:87
+#: src/general-panel.js:90 src/layout-panel.js:87 src/layout-panel.js:90
+msgid "50%"
+msgstr "50%"
 
-#: build/tzm-responsive-block-controls.js:1 src/image-typography-panel.js:66
-msgid "Align image right"
-msgstr "Bild rechts ausrichten"
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:93
+#: src/general-panel.js:96 src/layout-panel.js:93 src/layout-panel.js:96
+msgid "66%"
+msgstr "66%"
 
-#: build/tzm-responsive-block-controls.js:1 src/image-typography-panel.js:97
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:99
+#: src/general-panel.js:102 src/layout-panel.js:99 src/layout-panel.js:102
+msgid "75%"
+msgstr "75%"
+
+#: build/tzm-responsive-block-controls.js:1 src/media-panel.js:84
+msgid "Align centered"
+msgstr "Zentriert ausrichten"
+
+#: build/tzm-responsive-block-controls.js:1 src/media-panel.js:79
+msgid "Align left"
+msgstr "Links ausrichten"
+
+#: build/tzm-responsive-block-controls.js:1 src/media-panel.js:89
+msgid "Align right"
+msgstr "Rechts ausrichten"
+
+#: build/tzm-responsive-block-controls.js:1 src/typography-panel.js:70
 msgid "Align text justify"
 msgstr "Text als Blocksatz"
 
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:111
-#: src/general-layout-panel.js:116
+#: build/tzm-responsive-block-controls.js:1 src/media-panel.js:70
+#: src/media-panel.js:75
+msgid "Alignment"
+msgstr "Ausrichtung"
+
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:117
+#: src/layout-panel.js:117
 msgid "Block justification"
 msgstr "Block-Ausrichtung"
+
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:81
+#: src/layout-panel.js:81
+msgid "Block width"
+msgstr "Blockbreite"
 
 #. Description of the plugin
 #: tzm-responsive-block-controls.php
@@ -45,21 +75,17 @@ msgid "Control your block's appearance depending on a device's screen width."
 msgstr "Bestimme das Aussehen deiner Blöcke abhängig von der Bildschirmbreite."
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:200
+#: src/tzm-responsive-block-controls.js:274
 msgid "Desktop"
 msgstr "Desktop"
 
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:82
-#: src/general-layout-panel.js:87
-msgid "Full width"
-msgstr "Ganze Breite"
+#: build/tzm-responsive-block-controls.js:1 src/media-panel.js:116
+#: src/media-panel.js:121
+msgid "Focal point"
+msgstr "Fokuspunkt"
 
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:66
-msgid "General & Layout"
-msgstr "Allgemein & Layout"
-
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:69
-#: src/general-layout-panel.js:74
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:62
+#: src/layout-panel.js:62
 msgid "Hide block"
 msgstr "Block ausblenden"
 
@@ -68,58 +94,57 @@ msgstr "Block ausblenden"
 msgid "https://www.tezmo.media"
 msgstr "https://www.tezmo.media"
 
-#: build/tzm-responsive-block-controls.js:1 src/image-typography-panel.js:45
-msgid "Image & Typography"
-msgstr "Bild & Typographie"
-
-#: build/tzm-responsive-block-controls.js:1 src/image-typography-panel.js:49
-#: src/image-typography-panel.js:53
-msgid "Image alignment"
-msgstr "Bildausrichtung"
-
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:126
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:127
+#: src/layout-panel.js:127
 msgid "Justify center"
 msgstr "Elemente zentriert ausrichten"
 
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:121
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:122
+#: src/layout-panel.js:122
 msgid "Justify left"
 msgstr "Elemente links ausrichten"
 
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:131
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:132
+#: src/layout-panel.js:132
 msgid "Justify right"
 msgstr "Elemente rechts ausrichten"
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:193
+#: src/tzm-responsive-block-controls.js:267
 msgid "Laptop"
 msgstr "Laptop"
 
+#: build/tzm-responsive-block-controls.js:1 src/media-panel.js:66
+msgid "Media"
+msgstr "Medien"
+
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:179
+#: src/tzm-responsive-block-controls.js:253
 msgid "Phone"
 msgstr "Handy"
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:171
+#: src/tzm-responsive-block-controls.js:245
 msgid "Responsive controls"
 msgstr "Responsive Einstellungen"
 
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:96
-#: src/general-layout-panel.js:101
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:71
+#: src/layout-panel.js:71
 msgid "Reverse order"
 msgstr "Reihenfolge umkehren"
 
-#: build/tzm-responsive-block-controls.js:1 src/general-layout-panel.js:136
+#: build/tzm-responsive-block-controls.js:1 src/general-panel.js:137
+#: src/layout-panel.js:137
 msgid "Space between blocks"
 msgstr "Abstand zwischen Blöcken"
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:186
+#: src/tzm-responsive-block-controls.js:260
 msgid "Tablet"
 msgstr "Tablet"
 
-#: build/tzm-responsive-block-controls.js:1 src/image-typography-panel.js:75
-#: src/image-typography-panel.js:79
+#: build/tzm-responsive-block-controls.js:1 src/typography-panel.js:48
+#: src/typography-panel.js:52
 msgid "Text alignment"
 msgstr "Textausrichtung"
 
@@ -132,3 +157,8 @@ msgstr "TezmoMedia - Jakob Wiens"
 #: tzm-responsive-block-controls.php
 msgid "TZM Responsive Block Controls"
 msgstr "TZM Responsive Block Controls"
+
+#: build/tzm-responsive-block-controls.js:1 src/media-panel.js:100
+#: src/media-panel.js:105
+msgid "Width"
+msgstr "Breite"
