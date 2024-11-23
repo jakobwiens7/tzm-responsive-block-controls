@@ -1,5 +1,9 @@
-== 1.0.3 ==
-- Added "Width" controls
+== 1.1.0 ==
+- Minor visual UI improvements
+- Added more flexible "Width" controls, replacing "Full width"
+- Added "Focal Point" control for media
+- Blocks now remember their last selected device
+- More bugfixes & improvements
 
 == 1.0.2 ==
 - Added "Justification" and "Reverse" support for "Social Links" block
