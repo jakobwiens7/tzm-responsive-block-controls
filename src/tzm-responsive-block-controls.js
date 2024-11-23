@@ -31,6 +31,7 @@ import {
  */
 import { 
 	cleanEmptyObject,
+	hasNestedValue,
 	hasBlockReverse, 
 	hasBlockJustify, 
 	hasBlockWidth, 
@@ -174,13 +175,11 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 					// Reset responsive attributes if they're not supported
 					const resetAttributes = {};
 					Object.keys(hasBlock).forEach(key => {
-
-						// TO-DO: Check for values inside objects, e.g. blockGap, margin?, padding?
-						if (!! responsiveControls?.[device]?.[key] && ! hasBlock[key]) {
+						const controlForKey = responsiveControls?.[device]?.[key];
+						
+						if (!! controlForKey && ! hasNestedValue(controlForKey) && ! hasBlock[key]) {
 							resetAttributes[key] = undefined;
-
-							// WIP >>>
-							console.log("Resetting " + key + " in " + props.name);
+							//console.log(`Resetting "${key}" in ${props.name}...`);
 						}
 					});
 					if (Object.keys(resetAttributes).length > 0) {
@@ -254,6 +253,10 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 					>
 						<TabPanel
 							className='responsive-controls-tab-panel'
+							initialTabName={responsiveControls?.lastDevice ?? null}
+							onSelect={ (tabName) => setAttributes({
+								responsiveControls: { ...responsiveControls, lastDevice: tabName }
+							}) }
 							tabs={ [
 								{
 									name: 'phone',
