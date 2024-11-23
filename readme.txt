@@ -1,11 +1,11 @@
 === TZM Responsive Block Controls ===
 Contributors: 		jakobwiens
-Tags: 				responsivity, responsive, block controls, mobile, customization
+Tags:				responsivity, responsive, block controls, mobile, customization
 Requires at least: 	6.4.0
-Tested up to: 		6.6.2
-Stable tag: 		1.0.3
+Tested up to: 		6.7.0
+Stable tag: 		1.0.4
 Requires PHP: 		7.4.0
-License: 			GPLv2 or later
+License:			GPLv2 or later
 License URI: 		https://www.gnu.org/licenses/gpl-2.0.html
 
 TZM Responsive Block Controls lets you customize blocks for different screen sizes. Control visibility, alignment, font size, spacing, and much more.
@@ -20,17 +20,18 @@ While the (Gutenberg) Block Editor has brought a lot of amazing and powerful too
 This plugin enhances the Block Editor by adding a dedicated **Responsive controls** panel right inside your block's settings tab. 
 The provided options allow you to customize how your blocks appear on different devices. No more need for complicated workarounds or custom CSS!
 
-* **Hide Blocks:** Easily hide blocks on specific devices to create tailored layouts.
-* **Full Width Blocks:** Make blocks take up the full width of their available space to adjust layouts on mobile devices.
-* **Reverse Direction:** Reverse the direction/order of blocks (like 'Media & Text', 'Columns', or 'Row' blocks) for optimized layouts.
+* **Hide Blocks:** Easily hide blocks on specific devices to create tailored, clutter-free layouts.
+* **Adjust Block Widths:** Set custom block widths per device, ensuring your content looks great on all screen sizes.
+* **Reverse Direction:** Reverse the direction/order of blocks (like 'Columns' or 'Row' blocks) for optimized layouts.
 * **Justify Blocks:** Ensure fluid layouts by adjusting block justification across different devices.
-* **Align Images and Text:** Control horizontal alignment of images and text for consistent layouts across devices.
-* **Font Size Adjustments:** Adjust font sizes per device to maintain readability and visual consistency.
-* **Control Padding and Margin:** Set custom padding and margins for each device to achieve perfect spacing.
-* **Adjust Block Gaps:** Adjust block spacing based on device type for optimal layout flow.
-* **Adjust Block Heights:** Set different block heights across devices to maintain consistent, visually appealing layouts.
+* **Optimize Focal Points:** Fine-tune focal points for background images and other media on different screen sizes.
+* **Align Media and Text:** Control horizontal alignment of media and text for consistent appearance across devices.
+* **Font Size Adjustments:** Adjust font sizes for each device to ensure optimal readability and maintain visual hierarchy.
+* **Control Padding and Margins:** Set custom padding and margins for each device to achieve perfect spacing.
+* **Adjust Block Gaps:** Define custom spacing between blocks to maintain flow and balance on all device types.
+* **Customize Block Heights:** Set different block heights across devices to maintain consistent layouts.
 
-With its extensive feature set, TZM Responsive Block Controls provides everything you need to create stunning and visually appealing designs across different devices.
+With such an extensive and exclusive feature set, TZM Responsive Block Controls provides everything you need to create stunning and visually appealing designs across different devices.
 
 === Source Code ===
 
@@ -98,23 +99,25 @@ However, your content will remain intact, and the blocks will revert to their de
 
 == Screenshots ==
 
-1. The Responsive Controls panel in your Inspector Controls provides an extensive and easy-to-use feature set
+1. The Responsive Controls panel provides an extensive and easy-to-use feature set (Desktop/Mobile comparison view)
 2. Preview responsive adjustments instantly (Desktop view)
-3. Preview responsive adjustments instantly (Tablet view)
-4. Preview responsive adjustments instantly (Phone/Mobile view)
+3. Preview responsive adjustments instantly (Phone/Mobile view)
 
 
 == Changelog ==
+
+== 1.1.0 ==
+- Minor visual UI improvements
+- Added more flexible "Width" controls, replacing "Full width"
+- Added "Focal Point" control for media
+- Blocks now remember their last selected device
+- More bugfixes & improvements
 
 == 1.0.2 ==
 - Added "Justification" and "Reverse" support for "Social Links" block
 - Minor bugfixes
 - Added changelog.txt
-- Updated readme.txt
 - Migrated source code to [GitHub](https://github.com/jakobwiens7/tzm-responsive-block-controls)
-
-= 1.0.1 = 
-- Fixed "Reverse block" functionality when "Stack on mobile" is enabled
 
 = 1.0.0 = 
 - Initial release :)
