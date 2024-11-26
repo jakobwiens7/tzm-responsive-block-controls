@@ -11,8 +11,11 @@ import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { useEffect } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
+import { registerPlugin } from '@wordpress/plugins';
+import { PluginMoreMenuItem } from '@wordpress/editor';
+import { check, unseen } from '@wordpress/icons';
 
 import {
 	InspectorControls,	
@@ -141,6 +144,12 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			availableUnits: availableUnits || [ 'px', 'em', 'rem', 'vw', 'vh', '%' ]
 		} );
 
+		// Get displayHiddenBlocks setting
+		const displayHiddenBlocks = useSelect(
+			(select) => select('core/preferences').get('tzm', 'displayHiddenBlocks', true),
+			[]
+		);
+
 
 		// ResponsiveBlockControls component
 		function ResponsiveBlockControls( {	device } ) {
@@ -168,44 +177,61 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			}
 
 
-			/**
-			 * Handle deprecated controls / responsive attributes
-			 */
+			// Initial tasks
 			useEffect(() => {
-					// Reset responsive attributes if they're not supported
-					const resetAttributes = {};
-					Object.keys(hasBlock).forEach(key => {
-						const controlForKey = responsiveControls?.[device]?.[key];
-						
-						if (!! controlForKey && ! hasNestedValue(controlForKey) && ! hasBlock[key]) {
-							resetAttributes[key] = undefined;
-							//console.log(`Resetting "${key}" in ${props.name}...`);
-						}
-					});
-					if (Object.keys(resetAttributes).length > 0) {
-						updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], ...resetAttributes }});
+				// Add 'tzm--hidden-blocks' class if preference is set
+				const iframe = document.querySelector('iframe[name="editor-canvas"]');
+
+				if (iframe) {
+					const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+					iframeDocument.body.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
+				}
+
+				// Convert deprecated 'height' to 'minHeight'
+				if (!! responsiveControls?.[device]?.height) {
+					console.log( 'TZM Responsive Block Controls: "height" attribute is now "minHeight. Converting attribute...' );
+
+					updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], 
+						minHeight: responsiveControls[device].height,
+						height: undefined,
+					}});
+				}
+
+				// Convert deprecated 'fullWidth' to 'width'
+				if (!! responsiveControls?.[device]?.fullWidth) {
+					console.log( 'TZM Responsive Block Controls: "Full Width" control is deprecated. Converting attribute...' );
+
+					updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], 
+						fullWidth: undefined,
+						width: 100
+					}});
+				}
+
+				// Reset responsive attributes if they're not supported
+				const resetAttributes = {};
+				Object.keys(hasBlock).forEach(key => {
+					const controlForKey = responsiveControls?.[device]?.[key];
+					
+					if (!! controlForKey && ! hasNestedValue(controlForKey) && ! hasBlock[key]) {
+						resetAttributes[key] = undefined;
+						//console.log(`Resetting "${key}" in ${props.name}...`);
 					}
-
-					// Convert 'height' to 'minHeight'
-					if (!! responsiveControls?.[device]?.height) {
-						console.log( 'TZM Responsive Block Controls: "height" attribute is now "minHeight. Converting attribute...' );
-
-						updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], 
-							minHeight: responsiveControls[device].height,
-							height: undefined,
-						}});
-					}
-
-					// Convert 'fullWidth' to 'width'
-					if (!! responsiveControls?.[device]?.fullWidth) {
-						console.log( 'TZM Responsive Block Controls: "Full Width" control is deprecated. Converting attribute...' );
-
-						updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], 
-							fullWidth: undefined,
-							width: 100
-						}});
-					}
+				});
+				if (Object.keys(resetAttributes).length > 0) {
+					updateResponsiveAttribute({ ...responsiveControls, [device]: { ...responsiveControls[device], ...resetAttributes }});
+				}
 			});
+
+			// Toggle 'tzm--hidden-blocks' class on preference change
+			useEffect(() => {
+				const iframe = document.querySelector('iframe[name="editor-canvas"]');
+		
+				if (iframe) {
+					const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+					iframeDocument.body.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
+				}
+			}, [displayHiddenBlocks]); // Re-run effect when preference changes
+
 
 			// Prepare responsive props for sub-components
 			const responsiveProps = { 
@@ -434,26 +460,65 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 	} );
 }*/
 
+
+/**
+ * Add an option to visually hide hidden blocks.
+ * 
+ * @return {Object} Component to toggle 'displayHiddenBlocks' preference
+ */
+const DisplayHiddenBlocksButton = () => {
+    const { set } = useDispatch('core/preferences');
+
+    const displayHiddenBlocks = useSelect(
+        (select) => select('core/preferences').get('tzm', 'displayHiddenBlocks', true),
+        []
+    );
+
+    const togglePreference = () => {
+        set('tzm', 'displayHiddenBlocks', !displayHiddenBlocks);
+    };
+
+	return (
+		<PluginMoreMenuItem
+			icon={ displayHiddenBlocks ? check : 'none' }
+			onClick={ togglePreference }
+		>
+		{  __("Display hidden blocks", 'tzm-responsive-block-controls') }
+		</PluginMoreMenuItem>
+	)
+};
+
+
+// Add responsive attribute
 addFilter(
 	'blocks.registerBlockType',
 	'tzm/responsive-attributes',
 	addResponsiveAttributes
 );
 
+// Add responsive controls
 addFilter(
 	'editor.BlockEdit',
 	'tzm/responsive-controls',
 	withResponsiveControls
 );
 
+// Add responsive styles (backend)
 addFilter(
    'editor.BlockListBlock',
    'tzm/responsive-styling-editor',
    addResponsiveStylingEditor
 );
 
+// Add responsive styles (frontend)
 /*addFilter(
 	'blocks.getSaveContent.extraProps',
 	'tzm/responsive-styling-frontend',
 	addResponsiveStyling
 );*/
+
+// Add option to toggle displaying hidden blocks
+registerPlugin(
+	'more-menu-item-test', 
+	{ render: DisplayHiddenBlocksButton } 
+);

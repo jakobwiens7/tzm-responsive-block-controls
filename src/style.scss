@@ -6,7 +6,19 @@ $device: "_DEVICE_";
 
 // Hidden
 .tzm-responsive__hidden__#{$device} {
-    display: none !important;
+    &:not(.wp-block) {
+        display: none !important;
+    }
+
+    // Display or hide blocks in the Block Editor
+    &.wp-block {
+        opacity: 0.3;
+        background: url("https://plugins.tezmo.dev/wp-content/plugins/tzm-responsive-block-controls/assets/hidden.png") !important;
+
+        .tzm--hidden-blocks & {
+            display: none !important;
+        }
+    }
 }
 
 // Full width **Deprecated**
@@ -190,11 +202,9 @@ $device: "_DEVICE_";
 
 // (Flex) Width
 [style*="--tzm-responsive--width--#{$device}"] {
-    /*:not(.is-layout-flex) > & {
-        width: calc(1% * var(--tzm-responsive--width--#{$device})) !important;
-    }*/
-
-    .is-layout-flex > & {
+    .is-layout-flex > &,
+    .wp-block-navigation > &,
+    .wp-block-navigation > .block-editor-block-list__layout > & {
         box-sizing: border-box;
         flex-basis: calc(
             (1% * var(--tzm-responsive--width--#{$device})) -
@@ -211,7 +221,8 @@ $device: "_DEVICE_";
         flex-grow: 0 !important;
     }
 
-    .wp-block-button__link {
+    > .wp-block-button__link,
+    > .wp-block-navigation-item__content {
         width: 100%;
     }
 
