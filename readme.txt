@@ -88,6 +88,10 @@ If you prefer to use your own custom CSS for styling blocks, you can disable the
 	}
 	add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block_controls_css');`
 
+= Can I prevent hidden blocks from being displayed entirely? =
+Yes, you can toggle the visibility of "hidden" blocks. To do so, open the main Options menu (the three dots menu in the top-right corner of the block editor) and enable or disable the "Display hidden blocks" option.
+When disabled, hidden blocks won’t appear in the editor preview but can still be selected via the List View. By default, this option is enabled to simplify editing.
+
 = Does it work with classic themes? =
 No, this plugin is designed specifically for use with the Block Editor and works only with block-based themes. 
 It doesn’t support classic themes that use the older editor framework.
@@ -106,14 +110,17 @@ However, your content will remain intact, and the blocks will revert to their de
 
 == Changelog ==
 
-== 1.1.0 ==
+= 1.1.1 =
+- Added an option to toggle visibility of hidden blocks
+
+= 1.1.0 =
 - Minor visual UI improvements
 - Added more flexible "Width" controls, replacing "Full width"
 - Added "Focal Point" control for media
 - Blocks now remember their last selected device
 - More bugfixes & improvements
 
-== 1.0.2 ==
+= 1.0.2 =
 - Added "Justification" and "Reverse" support for "Social Links" block
 - Minor bugfixes
 - Added changelog.txt

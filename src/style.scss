@@ -13,7 +13,7 @@ $device: "_DEVICE_";
     // Display or hide blocks in the Block Editor
     &.wp-block {
         opacity: 0.3;
-        background: url("https://plugins.tezmo.dev/wp-content/plugins/tzm-responsive-block-controls/assets/hidden.png") !important;
+        background: url("hidden.png") !important;
 
         .tzm--hidden-blocks & {
             display: none !important;

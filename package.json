@@ -19,12 +19,12 @@
 		"test:unit": "wp-scripts test-unit-js"
 	},
 	"dependencies": {
-		"@wordpress/block-editor": "^14.3.0",
-		"@wordpress/blocks": "^13.8.0",
-		"@wordpress/i18n": "^5.7.0",
+		"@wordpress/block-editor": "^14.8.0",
+		"@wordpress/blocks": "^14.2.0",
+		"@wordpress/i18n": "^5.13.0",
 		"po2json": "^0.3.0"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^30.0.2"
+		"@wordpress/scripts": "^30.6.0"
 	}
 }
