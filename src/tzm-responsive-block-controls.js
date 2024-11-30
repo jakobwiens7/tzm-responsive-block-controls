@@ -351,13 +351,17 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 						switch (option) {
 							case 'hidden':
 							case 'reverse':
-							//case 'fullWidth':
 								classes.push(`tzm-responsive__${kebabCase(option)}__${device}`);
 								break;
 							
 							case 'imageAlign':
 								classes.push(`tzm-responsive__${kebabCase(option)}-${value}__${device}`);
 								break;
+
+							case 'width':
+								if (value == 100) classes.push(`tzm-responsive__full-width__${device}`);
+								break;
+		
 						}
 					});
 				}
@@ -406,10 +410,13 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 							case 'justify':
 							case 'textAlign':
 							case 'fontSize':
-							case 'width':
 							case 'mediaWidth':
 							case 'minHeight':
 								if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
+								break;
+
+							case 'width':
+								if (value !== 100) styles[`--tzm-responsive--width--' . ${device}`] = value;
 								break;
 						}
 					});

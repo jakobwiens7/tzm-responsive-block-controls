@@ -241,30 +241,35 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                         case 'margin':
                             if (count($value) === 4) {
                                 $is_short = $value['top'] == $value['right'] && $value['top'] == $value['bottom'] && $value['top'] == $value['left'];
-                                $styles[] = '--tzm-responsive--' . $option . '--' . $device . ':' . ($is_short ? $value['top'] : implode(' ', $value));
+                                $styles[] = '--tzm-responsive--' . $option . '--' . $device . ': ' . ($is_short ? $value['top'] : implode(' ', $value));
                             } else {
                                 foreach ($value as $dir => $dirval) {
-                                    $styles[] = '--tzm-responsive--' . $option . '-' . $dir . '--' . $device . ':' . $dirval;
+                                    $styles[] = '--tzm-responsive--' . $option . '-' . $dir . '--' . $device . ': ' . $dirval;
                                 }
                             }
                             break;
 
                         case 'blockGap':
-                            $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ':' . $value['top'];
+                            $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . $value['top'];
                             break;
 
                         case 'focalPoint':
                             if (is_array($value)) {
-                                $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ':' . ($value['x'] ?? 0) * 100 . "% " . ($value['y'] ?? 0) * 100 . "%";
+                                $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . ($value['x'] ?? 0) * 100 . "% " . ($value['y'] ?? 0) * 100 . "%";
                             }
                             break;
                         case 'justify':
                         case 'textAlign':
                         case 'fontSize':
-                        case 'width':
                         case 'mediaWidth':
                         case 'minHeight':
-                            $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ':' . $value;
+                            $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . $value;
+
+                            // Collect mixed
+                        case 'width':
+                            if ($value == 100) $classes[] = 'tzm-responsive__full-width__' . $device;
+                            else $styles[] = '--tzm-responsive--width--' . $device . ': ' . $value;
+                            break;
                     }
                 }
             }

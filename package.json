@@ -4,7 +4,7 @@
 	"description": "Control your block's appearance depending on a device's screen width.",
 	"author": "TezmoMedia - Jakob Wiens",
 	"license": "GPL-2.0-or-later",
-	"main": "build/responsive-block-controls.js",
+	"main": "build/tzm-responsive-block-controls.js",
 	"scripts": {
 		"start": "wp-scripts start src/tzm-responsive-block-controls.js",
 		"build": "wp-scripts build src/tzm-responsive-block-controls.js",
