@@ -6,14 +6,15 @@ $device: "_DEVICE_";
 
 // Hidden
 .tzm-responsive__hidden__#{$device} {
+    // Only hide hidden blocks on Frontend
     &:not(.wp-block) {
         display: none !important;
     }
 
-    // Display or hide blocks in the Block Editor
+    // Indicate or hide hidden blocks in the Block Editor
     &.wp-block {
         opacity: 0.3;
-        background: url("hidden.png") !important;
+        background: var(--tzm--hidden-blocks-bg, none);
 
         .tzm--hidden-blocks & {
             display: none !important;

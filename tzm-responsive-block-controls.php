@@ -111,9 +111,10 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             // Get source CSS stylesheet
             $css = file_get_contents(plugin_dir_path(__FILE__) . 'build/style-tzm-responsive-block-controls.css');
             $mobile_css = '.tzm-responsive__reverse___DEVICE_.is-layout-flex:not(.wp-block-group):not(.wp-block-navigation):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important; }';
+            $hidden_css = 'body { --tzm--hidden-blocks-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAQAAAC1QeVaAAAASElEQVQY02NgQALS/5F5Ssg8qa/IUgooUg+QpWRRpA7hNB5VCsV4VANReKjOQDWDgYFIm/G4F7cv8YSNLG4pFCNQeSjq0MwAAPCoHW3Q0Dt9AAAAAElFTkSuQmCC"); }';
 
             // Generate responsive CSS stylesheet
-            $output_css = '';
+            $output_css = $hidden_css;
             $placeholder = '_DEVICE_';
 
             foreach ($breakpoints as $device => $value) {
