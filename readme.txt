@@ -110,8 +110,9 @@ However, your content will remain intact, and the blocks will revert to their de
 
 == Changelog ==
 
-= 1.1.1 =
+= 1.1.2 =
 - Added an option to toggle visibility of hidden blocks
+- Bugfix regarding "reverse" and "block width" settings
 
 = 1.1.0 =
 - Minor visual UI improvements

@@ -1,3 +1,7 @@
+== 1.1.2 ==
+- Added an option to toggle visibility of hidden blocks
+- Bugfix regarding "reverse" and "block width" settings
+
 == 1.1.0 ==
 - Minor visual UI improvements
 - Added more flexible "Width" controls, replacing "Full width"
