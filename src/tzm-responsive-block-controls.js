@@ -15,7 +15,7 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginMoreMenuItem } from '@wordpress/editor';
-import { check, unseen } from '@wordpress/icons';
+import { check } from '@wordpress/icons';
 
 import {
 	InspectorControls,	
@@ -102,7 +102,7 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			attributes,
 			setAttributes,
 			clientId,
-			isSelected,
+			//isSelected,
 			context: { postId, postType },
 		} = props;
 		
