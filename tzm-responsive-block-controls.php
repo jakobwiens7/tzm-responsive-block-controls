@@ -265,6 +265,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                         case 'mediaWidth':
                         case 'minHeight':
                             $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . $value;
+                            break;
 
                             // Collect mixed
                         case 'width':
