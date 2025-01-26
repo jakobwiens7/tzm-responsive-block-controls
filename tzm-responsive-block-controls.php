@@ -40,7 +40,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
         {
 
             // Load plugin textdomain
-            add_action('plugins_loaded', array($this, 'load_textdomain'));
+            add_action('init', array($this, 'load_textdomain'));
 
             // Render block
             add_filter('render_block', array($this, 'render_block'), 10, 2);
