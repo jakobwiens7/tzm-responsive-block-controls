@@ -1,3 +1,13 @@
+// Iframe content
+body {
+    --tzm--hidden-blocks-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAQAAAC1QeVaAAAASElEQVQY02NgQALS/5F5Ssg8qa/IUgooUg+QpWRRpA7hNB5VCsV4VANReKjOQDWDgYFIm/G4F7cv8YSNLG4pFCNQeSjq0MwAAPCoHW3Q0Dt9AAAAAElFTkSuQmCC");
+}
+.block-editor-block-list__layout
+    .wp-block-tzm-section.block-editor-block-list__block:not([contenteditable="true"]):focus:after {
+    border-radius: inherit;
+}
+
+// Inspector controls
 .block-editor-block-inspector .block-editor-panel-responsive {
     .components-tab-panel__tabs {
         justify-content: space-evenly;

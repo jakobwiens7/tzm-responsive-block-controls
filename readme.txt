@@ -3,7 +3,7 @@ Contributors: 		jakobwiens
 Tags:				responsivity, responsive, block controls, mobile, customization
 Requires at least: 	6.4.0
 Tested up to: 		6.7.0
-Stable tag: 		1.1.3
+Stable tag: 		1.1.4
 Requires PHP: 		7.4.0
 License:			GPLv2 or later
 License URI: 		https://www.gnu.org/licenses/gpl-2.0.html
@@ -30,6 +30,7 @@ The provided options allow you to customize how your blocks appear on different 
 * **Control Padding and Margins:** Set custom padding and margins for each device to achieve perfect spacing.
 * **Adjust Block Gaps:** Define custom spacing between blocks to maintain flow and balance on all device types.
 * **Customize Block Heights:** Set different block heights across devices to maintain consistent layouts.
+* **Border Radius**: Customize the border-radius to achieve consistent rounded corners across different devices.
 
 With such an extensive and exclusive feature set, TZM Responsive Block Controls provides everything you need to create stunning and visually appealing designs across different devices.
 
@@ -109,6 +110,11 @@ However, your content will remain intact, and the blocks will revert to their de
 
 
 == Changelog ==
+
+= 1.1.4 =
+- Added responsive "Border-Radius" support
+- Hook for load_textdomain changed to "init"
+- Bugfix regarding some styles not being added correctly
 
 = 1.1.2 =
 - Added an option to toggle visibility of hidden blocks

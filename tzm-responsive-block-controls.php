@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			1.1.3
+ * Version:			1.1.4
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
@@ -111,10 +111,9 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             // Get source CSS stylesheet
             $css = file_get_contents(plugin_dir_path(__FILE__) . 'build/style-tzm-responsive-block-controls.css');
             $mobile_css = '.tzm-responsive__reverse___DEVICE_.is-layout-flex:not(.wp-block-group):not(.wp-block-navigation):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important; }';
-            $hidden_css = 'body { --tzm--hidden-blocks-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAQAAAC1QeVaAAAASElEQVQY02NgQALS/5F5Ssg8qa/IUgooUg+QpWRRpA7hNB5VCsV4VANReKjOQDWDgYFIm/G4F7cv8YSNLG4pFCNQeSjq0MwAAPCoHW3Q0Dt9AAAAAElFTkSuQmCC"); }';
 
             // Generate responsive CSS stylesheet
-            $output_css = $hidden_css;
+            $output_css = '';
             $placeholder = '_DEVICE_';
 
             foreach ($breakpoints as $device => $value) {
@@ -227,7 +226,6 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 foreach ($options as $option => $value) {
 
                     switch ($option) {
-                            // Collect classes
                         case 'hidden':
                         case 'reverse':
                             $classes[] = 'tzm-responsive__' . _wp_to_kebab_case($option) . '__' . $device;
@@ -237,15 +235,21 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                             $classes[] = 'tzm-responsive__' . _wp_to_kebab_case($option) . '-' . $value . '__' . $device;
                             break;
 
-                            // Collect styles
                         case 'padding':
                         case 'margin':
-                            if (count($value) === 4) {
-                                $is_short = $value['top'] == $value['right'] && $value['top'] == $value['bottom'] && $value['top'] == $value['left'];
-                                $styles[] = '--tzm-responsive--' . $option . '--' . $device . ': ' . ($is_short ? $value['top'] : implode(' ', $value));
+                        case 'borderRadius':
+                            if (is_array($value) && count($value) === 4) {
+                                $is_short = count(array_unique($value)) === 1;
+
+                                if ($option == 'borderRadius') {
+                                    $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . ($is_short ? $value['topLeft'] : implode(' ', $value));
+                                } else {
+                                    //$is_short = $value['top'] == $value['right'] && $value['top'] == $value['bottom'] && $value['top'] == $value['left'];
+                                    $styles[] = '--tzm-responsive--' . $option . '--' . $device . ': ' . ($is_short ? $value['top'] : implode(' ', $value));
+                                }
                             } else {
                                 foreach ($value as $dir => $dirval) {
-                                    $styles[] = '--tzm-responsive--' . $option . '-' . $dir . '--' . $device . ': ' . $dirval;
+                                    $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '-' . _wp_to_kebab_case($dir) . '--' . $device . ': ' . $dirval;
                                 }
                             }
                             break;
@@ -267,7 +271,6 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                             $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . $value;
                             break;
 
-                            // Collect mixed
                         case 'width':
                             if ($value == 100) $classes[] = 'tzm-responsive__full-width__' . $device;
                             else $styles[] = '--tzm-responsive--width--' . $device . ': ' . $value;

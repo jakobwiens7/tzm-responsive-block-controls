@@ -14,6 +14,7 @@
 - **Font Size Adjustments**: Fine-tune font sizes for readability on any device.
 - **Padding & Margins**: Customize spacing with per-device padding and margins.
 - **Block Heights**: Maintain proportional block heights across screen sizes.
+- **Border Radius**: Customize the border-radius to achieve consistent rounded corners across different devices.
 
 With these tools, you can easily craft beautiful, responsive designs without writing code.
 
@@ -52,6 +53,12 @@ add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block
 ```
 
 ## Changelog
+
+#### 1.1.4
+
+- Added responsive "Border-Radius" support
+- Hook for load_textdomain changed to "init"
+- Bugfix regarding some styles not being added correctly
 
 #### 1.1.2
 
