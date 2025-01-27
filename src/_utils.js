@@ -23,34 +23,46 @@ export function addFallbackUnit(value, defaultUnit = 'px') {
 
 /**
  * Splits a shorthand CSS value into individual values for top, right, bottom, and left.
+ * Also supports splitting border-related values (e.g., border-radius) into top-left, top-right, bottom-right, and bottom-left.
  * 
- * @param {string|object} value 	The shorthand value to split, typically a string (e.g., '10px'). 
- * 									If it is already an object or an undefined value, it is returned as-is.
- *
- * @return {object|string} 			Returns an object with `top`, `right`, `bottom`, and `left` properties if the input is a string.
+ * @param {string|object} value     The shorthand value to split, typically a string (e.g., '10px').
+ *                                  If it is already an object or undefined, it is returned as-is.
+ * @param {boolean} isBorder        Whether to format the values for border-related properties (e.g., border-radius).
+ * 
+ * @return {object|string}          Returns an object with `top`, `right`, `bottom`, and `left` properties if `isBorder` is false.
+ *                                  Returns an object with `topLeft`, `topRight`, `bottomRight`, and `bottomLeft` if `isBorder` is true.
  */
-export function splitStyleValue( value ) {
+export function splitStyleValue( value, isBorder = false ) {
 	if ( value && typeof value === 'string' ) {
-		return {
-			top: value,
-			right: value,
-			bottom: value,
-			left: value,
-		};
+		if (isBorder) {
+			return {
+				topLeft: value,
+				topRight: value,
+				bottomRight: value,
+				bottomLeft: value,
+			}
+		} else {
+			return {
+				top: value,
+				right: value,
+				bottom: value,
+				left: value,
+			}
+		}
 	}
 	return value;
 }
 
 
 /**
- * Validates and ensures that box-related values (e.g., padding or margin) have appropriate fallback units.
+ * Validates and ensures that box-related values (e.g., padding, margin border-radius) have appropriate fallback units.
  *
  * @param {string|number|object} value	The box value to validate.
  * 
  * @return {string|object|undefined} 	Returns the validated value with fallback units added or `undefined` if the object has no valid sides with values.
  */
 export function validateBoxValue( value ) {       
-	// Handle object with top, right, bottom, left or a single value
+	// Handle object with multiple values (like top, right, bottomLeft, etc.) or a single value
 	if ( typeof value === 'object' && value !== null ) {
 		const paddedVal = {};
 
@@ -63,7 +75,7 @@ export function validateBoxValue( value ) {
 		return Object.values(paddedVal).some(val => val !== undefined) ? paddedVal : undefined;
 
 	} else {
-		// Ensure that the single padding/margin value has a fallback unit
+		// Ensure that the single value has a fallback unit
 		return addFallbackUnit(value);
 	}
 }
@@ -108,190 +120,3 @@ export const cleanEmptyObject = ( object ) => {
 	);
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
 };
-
-
-/**
- * Helper functions to determine supported blocks by feature
- * 
- * @param {Object} props
- * @param {Object} parentProps 
- * @param {Boolean} hasInnerBlocks 
- */
-export const hasBlockWidth = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		parentProps?.attributes?.layout?.type === "flex" ||
-		props.name === 'core/column' ||
-		props.name === 'core/button' ||
-		props.name === 'core/social-link' ||
-		props.name === 'core/navigation-item' ||
-		(props.name === 'core/image' && parentProps?.name === 'core/gallery')
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockMediaWidth = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		props.name === 'core/site-logo' ||
-		props.name === 'core/post-featured-image' ||
-		props.name === 'core/avatar' ||
-		props.name === 'core/video' ||
-		(props.name === 'core/image' && parentProps?.name !== 'core/gallery')
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockJustify = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		props.attributes.layout?.type === "flex" ||
-		props.name === 'core/navigation' ||
-		props.name === 'core/buttons' ||
-		props.name === 'core/social-links'
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockReverse = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		props.attributes.layout?.type === "flex" ||
-		props.name === 'core/navigation' ||
-		props.name === 'core/columns' ||
-		//props.name === 'core/media-text' ||
-		props.name === 'core/gallery' ||
-		props.name === 'core/buttons' ||
-		props.name === 'core/social-links'
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockMediaAlign = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		props.name === 'core/site-logo' ||
-		props.name === 'core/post-featured-image' ||
-		props.name === 'core/avatar' ||
-		(props.name === 'core/image' && parentProps?.name !== 'core/gallery')
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockFocalPoint = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		(
-			props.name === 'core/media-text' ||
-			props.name === 'core/image' ||
-			props.name === 'core/video' ||
-			props.name === 'core/cover' ||
-			props.name === 'tzm/section'
-		) && (
-			!! props.attributes.url ||
-			!! props.attributes.mediaUrl ||
-			!! props.attributes.style?.background?.backgroundImage?.url || 
-			props.attributes.useFeaturedImage
-		)
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockTextAlign = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		props.name !== 'core/site-logo' &&
-		props.name !== 'core/post-featured-image' &&
-		props.name !== 'core/video' &&
-		props.name !== 'core/audio' &&
-		props.name !== 'core/spacer' &&
-		props.name !== 'core/separator' &&
-		props.name !== 'core/avatar'
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockFontSize = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		props.name !== 'core/site-logo' &&
-		props.name !== 'core/post-featured-image' &&
-		props.name !== 'core/video' &&
-		props.name !== 'core/audio' &&
-		props.name !== 'core/spacer' &&
-		props.name !== 'core/separator' &&
-		props.name !== 'core/avatar'
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockPadding = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		props.name !== 'core/spacer' &&
-		props.name !== 'core/separator' &&
-		props.name !== 'core/calendar' &&
-		props.name !== 'core/search'
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockMargin = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		true // WIP
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockGap = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		!! hasInnerBlocks &&
-		props.name !== 'core/list' &&
-		props.name !== 'core/list-item' &&
-		props.name !== 'core/page-list' &&
-		props.name !== 'core/comments' &&
-		props.name !== 'core/quote' &&
-		props.name !== 'core/details'
-	) return true;
-	
-	else return false;
-}
-
-export const hasBlockMinHeight = (props, parentProps = null, hasInnerBlocks = false) => {
-	if (! props) return;
-
-	if (
-		"minHeight" in props.attributes ||
-		props.name === "core/cover" ||
-		props.name === "core/group" ||
-		props.name === "core/post-content" ||
-		props.name === "core/columns" ||
-		props.name === "core/spacer" ||
-		props.name === "tzm/section"
-	) return true;
-	
-	else return false;
-}
