@@ -29,6 +29,7 @@ $device: "_DEVICE_";
     .wp-block-navigation > .block-editor-block-list__layout > & {
         box-sizing: border-box;
         flex-basis: 100% !important;
+        width: 100%;
     }
     .wp-block-columns:has(&),
     .wp-block-group.is-layout-flex.is-nowrap:has(&) {
@@ -52,6 +53,11 @@ $device: "_DEVICE_";
                 var(--tzm-responsive--block-gap--#{$device}, var(--wp--style--block-gap, 0.5em)) *
                 (1 - var(--tzm-responsive--width--#{$device}) / 100)
         ) !important;
+        width: calc(
+            (1% * var(--tzm-responsive--width--#{$device})) -
+                var(--tzm-responsive--block-gap--#{$device}, var(--wp--style--block-gap, 0.5em)) *
+                (1 - var(--tzm-responsive--width--#{$device}) / 100)
+        );
     }
 
     .wp-block-columns:has(&),
@@ -211,7 +217,6 @@ $device: "_DEVICE_";
         font-size: var(--tzm-responsive--font-size--#{$device}) !important;
     }
 
-    > figcaption,
     &.wp-block-buttons .wp-block-button__link,
     &.wp-block-button .wp-block-button__link {
         font-size: inherit !important;
@@ -276,6 +281,23 @@ $device: "_DEVICE_";
     > [class*="__inner-container"] > :not(:last-child) {
         margin-block-end: var(--tzm-responsive--block-gap--#{$device}) !important;
     }
+}
+
+// Border-radius
+[style*="--tzm-responsive--border-radius--#{$device}"] {
+    border-radius: var(--tzm-responsive--border-radius--#{$device}) !important;
+}
+[style*="--tzm-responsive--border-radius-top-left--#{$device}"] {
+    border-top-left-radius: var(--tzm-responsive--border-radius-top-left--#{$device}) !important;
+}
+[style*="--tzm-responsive--border-radius-top-right--#{$device}"] {
+    border-top-right-radius: var(--tzm-responsive--border-radius-top-right--#{$device}) !important;
+}
+[style*="--tzm-responsive--border-radius-bottom-right--#{$device}"] {
+    border-bottom-right-radius: var(--tzm-responsive--border-radius-bottom-right--#{$device}) !important;
+}
+[style*="--tzm-responsive--border-radius-bottom-left--#{$device}"] {
+    border-bottom-left-radius: var(--tzm-responsive--border-radius-bottom-left--#{$device}) !important;
 }
 
 // Mobile specific styles

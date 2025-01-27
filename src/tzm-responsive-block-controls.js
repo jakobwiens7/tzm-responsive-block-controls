@@ -35,6 +35,9 @@ import {
 import { 
 	cleanEmptyObject,
 	hasNestedValue,
+} from './_utils';
+
+import { 
 	hasBlockReverse, 
 	hasBlockJustify, 
 	hasBlockWidth, 
@@ -46,14 +49,15 @@ import {
 	hasBlockPadding,
 	hasBlockMargin,
 	hasBlockGap,
-	hasBlockMinHeight
-} from './_utils';
+	hasBlockMinHeight,
+	hasBlockBorder
+} from './_supports';
 
 import GeneralPanel from './general-panel';
 import MediaPanel from './media-panel';
 import TypographyPanel from './typography-panel';
 import DimensionsPanel from './dimensions-panel';
-
+import BorderPanel from './border-panel';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -102,7 +106,7 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			attributes,
 			setAttributes,
 			clientId,
-			//isSelected,
+			isSelected,
 			context: { postId, postType },
 		} = props;
 		
@@ -167,7 +171,8 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 				padding: hasBlockPadding(props),
 				margin: hasBlockMargin(props),
 				blockGap: hasBlockGap(props, parentProps, hasInnerBlocks),
-				minHeight: hasBlockMinHeight(props, parentProps)
+				minHeight: hasBlockMinHeight(props, parentProps),
+				border: hasBlockBorder(props),
 			};
 
 			// Clean and update 'responsiveControls' attribute
@@ -175,7 +180,6 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 				const cleanResponsiveControls = cleanEmptyObject(updatedResponsiveControls);
 				setAttributes({ responsiveControls: cleanResponsiveControls });
 			}
-
 
 			// Initial tasks
 			useEffect(() => {
@@ -257,6 +261,9 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 				) }
 				{ (hasBlock.padding || hasBlock.margin || hasBlock.blockGap || hasBlock.minHeight) && (
 					<DimensionsPanel props={responsiveProps}/>
+				) }
+				{ hasBlock.border && (
+					<BorderPanel props={responsiveProps}/>
 				) }
 			</>
 			);
@@ -340,101 +347,106 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 			responsiveControls
 		} = attributes;
 
-		// Helper function to get responsive classes
-		function getResponsiveClasses() {
-			if (!responsiveControls || typeof responsiveControls !== 'object') return [];
 
-			return Object.entries(responsiveControls).reduce((classes, [device, options]) => {
-				if (typeof options === 'object') {
-					Object.entries(options).forEach(([option, value]) => {
-
-						switch (option) {
-							case 'hidden':
-							case 'reverse':
-								classes.push(`tzm-responsive__${kebabCase(option)}__${device}`);
-								break;
-							
-							case 'imageAlign':
-								classes.push(`tzm-responsive__${kebabCase(option)}-${value}__${device}`);
-								break;
-
-							case 'width':
-								if (value == 100) classes.push(`tzm-responsive__full-width__${device}`);
-								break;
-		
-						}
-					});
-				}
-				return classes;
-			}, []);
+		const keys = Object.keys(responsiveControls || {});
+		if ( keys.length === 0 || (keys.length === 1 && keys[0] === "lastDevice") ) {
+			return (
+				<BlockListBlock	{ ...props } />
+			);
 		}
 
-		// Helper function to get responsive styles
-		function getResponsiveStyles() {
-			if (!responsiveControls || typeof responsiveControls !== 'object') return {};
-			
-			return Object.entries(responsiveControls).reduce((styles, [device, options]) => {
-				if (typeof options === 'object') {
-					Object.entries(options).forEach(([option, value]) => {
+		const responsiveClasses = Object.entries(responsiveControls).reduce((classes, [device, options]) => {
+			if (typeof options === 'object') {
+				Object.entries(options).forEach(([option, value]) => {
 
-						switch (option) {
-							case 'padding':
-							case 'margin':
-								if (typeof value === 'object') {
-									const fullSet = ['top', 'right', 'bottom', 'left'];
-									const hasAllSides = fullSet.every((side) => value[side] !== undefined);
-		
-									if (hasAllSides) {
+					switch (option) {
+						case 'hidden':
+						case 'reverse':
+							classes.push(`tzm-responsive__${kebabCase(option)}__${device}`);
+							break;
+						
+						case 'imageAlign':
+							classes.push(`tzm-responsive__${kebabCase(option)}-${value}__${device}`);
+							break;
+
+						case 'width':
+							if (value == 100) classes.push(`tzm-responsive__full-width__${device}`);
+							break;
+	
+					}
+				});
+			}
+			return classes;
+		}, []);
+
+		const responsiveStyles = Object.entries(responsiveControls).reduce((styles, [device, options]) => {
+			if (typeof options === 'object') {
+				Object.entries(options).forEach(([option, value]) => {
+
+					switch (option) {
+						case 'padding':
+						case 'margin':
+						case 'borderRadius':
+							if (typeof value === 'object') {
+								const fullSet = option == 'borderRadius' 
+									? ['topLeft', 'topRight', 'bottomRight', 'bottomLeft'] 
+									: ['top', 'right', 'bottom', 'left'];
+								const hasAllSides = fullSet.every((side) => value[side] !== undefined);
+	
+								if (hasAllSides) {
+									if (option == 'borderRadius') {
+										const isUniform = fullSet.every((side) => value[side] === value['topLeft']);
+										styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = isUniform
+											? value['topLeft']
+											: `${value['topLeft']} ${value['topRight']} ${value['bottomRight']} ${value['bottomLeft']}`;
+									} else {
 										const isUniform = fullSet.every((side) => value[side] === value['top']);
 										styles[`--tzm-responsive--${option}--${device}`] = isUniform
 											? value['top']
 											: `${value['top']} ${value['right']} ${value['bottom']} ${value['left']}`;
-									} else {
-										Object.entries(value).forEach(([direction, dirValue]) => {
-											styles[`--tzm-responsive--${option}-${direction}--${device}`] = dirValue;
-										});
 									}
+								} else {
+									Object.entries(value).forEach(([direction, dirValue]) => {
+										styles[`--tzm-responsive--${kebabCase(option)}-${kebabCase(direction)}--${device}`] = dirValue;
+									});
 								}
-								break;
+							}
+							break;
 
-							case 'blockGap':
-								if (typeof value === 'object' && 'top' in value) {
-									styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value.top;
-								}
-								break;
-							case 'focalPoint':
-								if (typeof value === 'object' && ('x' in value || 'y' in value)) {
-									styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = (value.x ?? 0)*100 + "% " + (value.y ?? 0)*100 + "%";
-								}
-								break;
-							case 'justify':
-							case 'textAlign':
-							case 'fontSize':
-							case 'mediaWidth':
-							case 'minHeight':
-								if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
-								break;
+						case 'blockGap':
+							if (typeof value === 'object' && 'top' in value) {
+								styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value.top;
+							}
+							break;
+						case 'focalPoint':
+							if (typeof value === 'object' && ('x' in value || 'y' in value)) {
+								styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = (value.x ?? 0)*100 + "% " + (value.y ?? 0)*100 + "%";
+							}
+							break;
+						case 'justify':
+						case 'textAlign':
+						case 'fontSize':
+						case 'mediaWidth':
+						case 'minHeight':
+							if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
+							break;
 
-							case 'width':
-								if (value !== 100) styles[`--tzm-responsive--width--' . ${device}`] = value;
-								break;
-						}
-					});
-				}
-				return styles;
-			}, {});
-		}
-
-		// Assign wrapper props and styles
-		let wrapperProps = { ...props.wrapperProps, style: getResponsiveStyles() };
+						case 'width':
+							if (value !== 100) styles[`--tzm-responsive--width--${device}`] = value;
+							break;
+					}
+				});
+			}
+			return styles;
+		}, {});
 
 		return (
 			<BlockListBlock	{ ...props } 
-				className={ clsx(className, getResponsiveClasses()) }
-				wrapperProps={ wrapperProps }
+				className={ clsx(className, responsiveClasses) }
+				wrapperProps={ { ...props.wrapperProps, style: responsiveStyles } }
 			/>
 		);
-
+	
 	};
 }, 'addResponsiveStylingEditor' );
 
