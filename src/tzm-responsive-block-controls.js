@@ -184,12 +184,8 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			// Initial tasks
 			useEffect(() => {
 				// Add 'tzm--hidden-blocks' class if preference is set
-				const iframe = document.querySelector('iframe[name="editor-canvas"]');
-
-				if (iframe) {
-					const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-					iframeDocument.body.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
-				}
+				const editorWrapper = document.querySelector('.editor-styles-wrapper');
+				if (editorWrapper) editorWrapper.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
 
 				// Convert deprecated 'height' to 'minHeight'
 				if (!! responsiveControls?.[device]?.height) {
@@ -228,12 +224,9 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 
 			// Toggle 'tzm--hidden-blocks' class on preference change
 			useEffect(() => {
-				const iframe = document.querySelector('iframe[name="editor-canvas"]');
-		
-				if (iframe) {
-					const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-					iframeDocument.body.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
-				}
+				const editorWrapper = document.querySelector('.editor-styles-wrapper');
+				if (editorWrapper) editorWrapper.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
+				
 			}, [displayHiddenBlocks]); // Re-run effect when preference changes
 
 
@@ -452,35 +445,6 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 
 
 /**
- * Add custom element class in save element.
- *
- * @param {Object} props     	Block element.
- * @param {Object} block      	Blocks object.
- * @param {Object} attributes	Blocks attributes.
- *
- * @return {Object} extraProps Modified block element.
- */
-/*function addResponsiveClasses( props, block, attributes ) {
-
-	const { 
-		className,
- 	} = props;
-	
-	const {
-		responsiveControls
-	} = attributes;
-	
-	return assign( {}, props, {
-		className: clsx( 
-			className, 'tzm-responsive-test', {
-				[`tzm-responsive-${responsiveControls?.id}`]: responsiveControls && responsiveControls.id
-			}
-		)
-	} );
-}*/
-
-
-/**
  * Add an option to visually hide hidden blocks.
  * 
  * @return {Object} Component to toggle 'displayHiddenBlocks' preference
@@ -529,15 +493,8 @@ addFilter(
    addResponsiveStylingEditor
 );
 
-// Add responsive styles (frontend)
-/*addFilter(
-	'blocks.getSaveContent.extraProps',
-	'tzm/responsive-styling-frontend',
-	addResponsiveStyling
-);*/
-
 // Add option to toggle displaying hidden blocks
 registerPlugin(
-	'more-menu-item-test', 
+	'tzm-responsive-display-hidden', 
 	{ render: DisplayHiddenBlocksButton } 
 );

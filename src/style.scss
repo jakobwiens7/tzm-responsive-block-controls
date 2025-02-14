@@ -285,7 +285,11 @@ $device: "_DEVICE_";
 
 // Border-radius
 [style*="--tzm-responsive--border-radius--#{$device}"] {
-    border-radius: var(--tzm-responsive--border-radius--#{$device}) !important;
+    > a img,
+    > img,
+    & {
+        border-radius: var(--tzm-responsive--border-radius--#{$device}) !important;
+    }
 }
 [style*="--tzm-responsive--border-radius-top-left--#{$device}"] {
     border-top-left-radius: var(--tzm-responsive--border-radius-top-left--#{$device}) !important;

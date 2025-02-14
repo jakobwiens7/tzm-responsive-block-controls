@@ -58,6 +58,9 @@ add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block
 
 - Added responsive "Border-Radius" support
 - Hook for load_textdomain changed to "init"
+
+#### 1.1.3
+
 - Bugfix regarding some styles not being added correctly
 
 #### 1.1.2

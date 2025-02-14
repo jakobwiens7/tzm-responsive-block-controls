@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			1.1.4
+ * Version:			1.1.5
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
@@ -242,10 +242,16 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                                 $is_short = count(array_unique($value)) === 1;
 
                                 if ($option == 'borderRadius') {
-                                    $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . ($is_short ? $value['topLeft'] : implode(' ', $value));
+                                    $styles[] = '--tzm-responsive--' . _wp_to_kebab_case($option) . '--' . $device . ': ' . ($is_short
+                                        ? $value['topLeft']
+                                        :  $value['topLeft'] . ' ' .  $value['topRight'] . ' ' .  $value['bottomRight'] . ' ' .  $value['bottomLeft']
+                                    );
                                 } else {
                                     //$is_short = $value['top'] == $value['right'] && $value['top'] == $value['bottom'] && $value['top'] == $value['left'];
-                                    $styles[] = '--tzm-responsive--' . $option . '--' . $device . ': ' . ($is_short ? $value['top'] : implode(' ', $value));
+                                    $styles[] = '--tzm-responsive--' . $option . '--' . $device . ': ' . ($is_short
+                                        ? $value['top']
+                                        : $value['top']  . ' ' . $value['right']  . ' ' . $value['bottom']  . ' ' . $value['left']
+                                    );
                                 }
                             } else {
                                 foreach ($value as $dir => $dirval) {
@@ -284,12 +290,10 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             $html = new WP_HTML_Tag_Processor($block_content);
             $html->next_tag();
 
-            // Replace classes
             if ($classes) {
                 $html->add_class($classes);
             }
 
-            // Replace styles
             if ($styles) {
                 $html_style = $html->get_attribute('style');
                 $html->set_attribute('style', $html_style ? $html_style . '; ' . $styles : $styles);
