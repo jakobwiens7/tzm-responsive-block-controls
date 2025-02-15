@@ -181,11 +181,30 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 				setAttributes({ responsiveControls: cleanResponsiveControls });
 			}
 
+			// Toggle the 'tzm--hidden-blocks' class (and check if inside an iframe)
+			function toggleHiddenBlocksClass(isEnabled) {
+				const editorVisualEditor = document.querySelector('.editor-visual-editor');
+				const isIframed = editorVisualEditor?.classList.contains('is-iframed');
+				let editorWrapper;
+			
+				if (isIframed) {
+					const iframe = document.querySelector('iframe[name="editor-canvas"]');
+					if (iframe) {
+						const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+						editorWrapper = iframeDocument?.querySelector('.editor-styles-wrapper')
+					}
+				} else {
+					editorWrapper = document.querySelector('.editor-styles-wrapper');
+				}
+
+				if (editorWrapper) editorWrapper.classList.toggle('tzm--hidden-blocks', !isEnabled);
+			}
+
 			// Initial tasks
 			useEffect(() => {
+
 				// Add 'tzm--hidden-blocks' class if preference is set
-				const editorWrapper = document.querySelector('.editor-styles-wrapper');
-				if (editorWrapper) editorWrapper.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
+				toggleHiddenBlocksClass(displayHiddenBlocks);
 
 				// Convert deprecated 'height' to 'minHeight'
 				if (!! responsiveControls?.[device]?.height) {
@@ -224,10 +243,8 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 
 			// Toggle 'tzm--hidden-blocks' class on preference change
 			useEffect(() => {
-				const editorWrapper = document.querySelector('.editor-styles-wrapper');
-				if (editorWrapper) editorWrapper.classList.toggle('tzm--hidden-blocks', !displayHiddenBlocks);
-				
-			}, [displayHiddenBlocks]); // Re-run effect when preference changes
+				toggleHiddenBlocksClass(displayHiddenBlocks);
+			}, [displayHiddenBlocks]);
 
 
 			// Prepare responsive props for sub-components
