@@ -2,7 +2,7 @@
 Contributors: 		jakobwiens
 Tags:				responsivity, responsive, block controls, mobile, customization
 Tested up to: 		6.7
-Stable tag: 		1.1.5
+Stable tag: 		1.2.0
 License:			GPLv2 or later
 License URI: 		https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,8 +63,7 @@ Inline Styles with CSS Variables: For features that require specific values, suc
 Note: This plugin relies on `!important` declarations to ensure styles are applied correctly. While the use of `!important` is typically discouraged, it is necessary in certain cases to achieve consistent, responsive behavior across devices. Please keep this in mind.
 
 = Does TZM Responsive Block Controls work with third-party blocks? =
-While it is primarily designed to target WordPress core blocks, some responsive features should also work with third-party blocks. However, third-party blocks may not always behave the same way as core blocks, which can lead to unexpected results or prevent the responsive controls from taking effect.
-Feel free to suggest blocks or plugins you think *TZM Responsive Block Controls* should support :)
+While it is primarily designed to target WordPress core blocks, most responsive features should also work with third-party blocks. However, third-party blocks may not always behave the same way as core blocks, which can lead to unexpected results or prevent the responsive controls from taking effect.
 
 = Can i define my own breakpoints? =
 Yes, you can easily customize the default breakpoints used by TZM Responsive Block Controls. Simply add the following code to your theme's functions.php file:
@@ -109,12 +108,11 @@ However, your content will remain intact, and the blocks will revert to their de
 
 == Changelog ==
 
-= 1.1.5 =
+= 1.2.0 =
+- Fixed "Display hidden blocks" when content is not iframed
 - More bugfixes & improvements
 - Added responsive "Border-Radius" support
 - Hook for load_textdomain changed to "init"
-
-= 1.1.3 =
 - Added an option to toggle visibility of hidden blocks
 - Bugfix regarding some styles not being added correctly
 - Bugfix regarding "reverse" and "block width" settings
@@ -125,10 +123,7 @@ However, your content will remain intact, and the blocks will revert to their de
 - Added "Focal Point" control for media
 - Blocks now remember their last selected device
 - More bugfixes & improvements
-
-= 1.0.2 =
 - Added "Justification" and "Reverse" support for "Social Links" block
-- Minor bugfixes
 - Added changelog.txt
 - Migrated source code to [GitHub](https://github.com/jakobwiens7/tzm-responsive-block-controls)
 

@@ -1,3 +1,6 @@
+== 1.2.0 ==
+- Fixed "Display hidden blocks" when content is not iframed
+
 == 1.1.5 ==
 - Bugfixes & optimization
 
