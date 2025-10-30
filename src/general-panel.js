@@ -5,12 +5,11 @@ import { __ } from '@wordpress/i18n';
 
 import {
     BaseControl,
-	Button, 
-	ButtonGroup,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+    __experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	ToggleControl,
     PanelRow,
-	//__experimentalToolsPanel as ToolsPanel,
-	//__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';
 
 import { 
@@ -31,7 +30,7 @@ import {
 export default function GeneralPanel({props}) {
 
     const { device, attributes, updateAttribute, hasBlock } = props;
-    const { responsiveControls } = attributes;
+    const { responsiveControls, isStackedOnMobile } = attributes;
 
     const isHidden = !! responsiveControls?.[device]?.hidden;
     const setHidden = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
@@ -43,17 +42,16 @@ export default function GeneralPanel({props}) {
         reverse: newValue 
     }});
 
-    const isWidth = !! responsiveControls?.[device]?.width;
+    //const isWidth = !! responsiveControls?.[device]?.width;
     const setWidth = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
         width: newValue,
         customWidth: undefined
     }});
 
-    const isJustify = !! responsiveControls?.[device]?.justify;
+    //const isJustify = !! responsiveControls?.[device]?.justify;
     const setJustify = (newValue) => updateAttribute({ ...responsiveControls, [device]: { ...responsiveControls?.[device], 
             justify: newValue
     }});
-
 
     return (
     <>
@@ -71,6 +69,7 @@ export default function GeneralPanel({props}) {
                     label={ __("Reverse order", "tzm-responsive-block-controls") }
                     checked={ isReverse }
                     onChange={ setReverse }
+                    help={ !! isStackedOnMobile ? __('Warning: "Stack on mobile" is currently enabled and may conflict with this setting.', "tzm-responsive-block-controls") : undefined }
                 />
             </PanelRow>
         ) }
@@ -81,32 +80,17 @@ export default function GeneralPanel({props}) {
                     label={ __("Block width", "tzm-responsive-block-controls") }
                     className="responsive-controls__width"
                 >
-                    <ButtonGroup>
-                        <Button __next40pxDefaultSize
-                            size="small"
-                            label={ __("50%", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.width == 50 }
-                            onClick={ () => setWidth(responsiveControls?.[device]?.width == 50 ? undefined : 50) }
-                        >{ __("50%", "tzm-responsive-block-controls") }</Button>
-                        <Button __next40pxDefaultSize
-                            size="small"
-                            label={ __("66%", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.width == 66 }
-                            onClick={ () => setWidth(responsiveControls?.[device]?.width == 66 ? undefined : 66) }
-                        >{ __("66%", "tzm-responsive-block-controls") }</Button>
-                        <Button __next40pxDefaultSize
-                            size="small"
-                            label={ __("75%", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.width == 75 }
-                            onClick={ () => setWidth(responsiveControls?.[device]?.width == 75 ? undefined : 75) }
-                        >{ __("75%", "tzm-responsive-block-controls") }</Button>
-                        <Button __next40pxDefaultSize
-                            size="small"
-                            label={ __("100%", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.width == 100 }
-                            onClick={ () => setWidth(responsiveControls?.[device]?.width == 100 ? undefined : 100) }
-                        >{ __("100%", "tzm-responsive-block-controls") }</Button>
-                    </ButtonGroup>
+                    <ToggleGroupControl __next40pxDefaultSize __nextHasNoMarginBottom 
+                        isDeselectable 
+                        isBlock
+                        value={ responsiveControls?.[device]?.width }
+                        onChange={ (newValue) => setWidth(newValue) }
+                    >
+                        <ToggleGroupControlOption value={ 50 } label={ __("50%", "tzm-responsive-block-controls") }/>
+                        <ToggleGroupControlOption value={ 66 } label={ __("66%", "tzm-responsive-block-controls") }/>
+                        <ToggleGroupControlOption value={ 75 } label={ __("75%", "tzm-responsive-block-controls") }/>
+                        <ToggleGroupControlOption value={ 100 } label={ __("100%", "tzm-responsive-block-controls") }/>
+                    </ToggleGroupControl>
                 </BaseControl>
             </PanelRow>
         ) }
@@ -117,28 +101,33 @@ export default function GeneralPanel({props}) {
                     label={ __("Block justification", "tzm-responsive-block-controls") }
                     className="responsive-controls__justify"
                 >
-                    <ButtonGroup>
-                        <Button __next40pxDefaultSize icon={ iconJustifyLeft }
+                    <ToggleGroupControl __next40pxDefaultSize __nextHasNoMarginBottom 
+                        isDeselectable 
+                        isBlock
+                        value={ responsiveControls?.[device]?.justify }
+                        onChange={ (newValue) => setJustify(newValue) }
+                    >
+                        <ToggleGroupControlOptionIcon
+                            icon={ iconJustifyLeft }
+                            value={ "start" }
                             label={ __("Justify left", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.justify == 'start' }
-                            onClick={ () => setJustify(responsiveControls?.[device]?.justify == 'start' ? undefined : 'start') }
                         />
-                        <Button __next40pxDefaultSize icon={ iconJustifyCenter }
+                        <ToggleGroupControlOptionIcon 
+                            icon={ iconJustifyCenter }
+                            value={ "center" }
                             label={ __("Justify center", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.justify == 'center' }
-                            onClick={ () => setJustify(responsiveControls?.[device]?.justify == 'center' ? undefined : 'center') }
                         />
-                        <Button __next40pxDefaultSize icon={ iconJustifyRight }
+                        <ToggleGroupControlOptionIcon
+                            icon={ iconJustifyRight }
+                            value={ "end" }
                             label={ __("Justify right", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.justify == 'end' }
-                            onClick={ () => setJustify(responsiveControls?.[device]?.justify == 'end' ? undefined : 'end') }
                         />
-                        <Button __next40pxDefaultSize icon={ iconJustifySpaceBetween }
+                        <ToggleGroupControlOptionIcon
+                            icon={ iconJustifySpaceBetween }
+                            value={ "space-between" }
                             label={ __("Space between blocks", "tzm-responsive-block-controls") }
-                            isPressed={ responsiveControls?.[device]?.justify == 'space-between' }
-                            onClick={ () => setJustify(responsiveControls?.[device]?.justify == 'space-between' ? undefined : 'space-between') }
                         />
-                    </ButtonGroup>
+                    </ToggleGroupControl>
                 </BaseControl>
             </PanelRow>
         ) }
