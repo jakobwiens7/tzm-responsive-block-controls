@@ -4,7 +4,7 @@
 import { __ } from '@wordpress/i18n';
 
 import {
-    __experimentalBoxControl as BoxControl,
+    BoxControl,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
 } from '@wordpress/components';

@@ -5,8 +5,8 @@ import { __ } from '@wordpress/i18n';
 
 import {
     BaseControl,
-	Button, 
-	ButtonGroup,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
     __experimentalUnitControl as UnitControl,
@@ -49,29 +49,37 @@ export default function TypographyPanel({props}) {
                     hasValue={ () => isTextAlign }
                     onDeselect={ () => setTextAlign() }
                 >
-                    <BaseControl __nextHasNoMarginBottom label={ __("Text alignment", "tzm-responsive-block-controls") }>
-                        <ButtonGroup>
-                            <Button __next40pxDefaultSize icon="editor-alignleft" 
+                    <BaseControl __nextHasNoMarginBottom 
+                        className="responsive-controls__text-align"
+                        label={ __("Text alignment", "tzm-responsive-block-controls") }
+                    >
+                        <ToggleGroupControl __next40pxDefaultSize __nextHasNoMarginBottom 
+                            isDeselectable 
+                            isBlock
+                            value={ responsiveControls?.[device]?.textAlign }
+                            onChange={ (newValue) => setTextAlign(newValue) }
+                        >
+                            <ToggleGroupControlOptionIcon 
+                                icon="editor-alignleft" 
+                                value={ "left" }
                                 label={ __("Align text left") }
-                                isPressed={ responsiveControls?.[device]?.textAlign == 'left' }
-                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'left' ? undefined : 'left') }
                             />
-                            <Button __next40pxDefaultSize icon="editor-aligncenter" 
+                            <ToggleGroupControlOptionIcon 
+                                icon="editor-aligncenter" 
+                                value={ "center" }
                                 label={ __("Align text center") }
-                                isPressed={ responsiveControls?.[device]?.textAlign == 'center' }
-                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'center' ? undefined : 'center') }
                             />
-                            <Button __next40pxDefaultSize icon="editor-alignright" 
+                            <ToggleGroupControlOptionIcon 
+                                icon="editor-alignright" 
+                                value={ "right" }
                                 label={ __("Align text right") }
-                                isPressed={ responsiveControls?.[device]?.textAlign == 'right' }
-                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'right' ? undefined : 'right') }
                             />
-                            <Button __next40pxDefaultSize icon="editor-justify" 
+                            <ToggleGroupControlOptionIcon 
+                                icon="editor-justify" 
+                                value={ "justify" }
                                 label={ __("Align text justify", "tzm-responsive-block-controls") }
-                                isPressed={ responsiveControls?.[device]?.textAlign == 'justify' }
-                                onClick={ () => setTextAlign(responsiveControls?.[device]?.textAlign == 'justify' ? undefined : 'justify') }
                             />
-                        </ButtonGroup>
+                        </ToggleGroupControl>
                     </BaseControl>
                 </ToolsPanelItem>
             ) }

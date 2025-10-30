@@ -7,9 +7,9 @@ import { useSelect, /*useDispatch*/ } from '@wordpress/data';
 
 import {
     BaseControl,
-	Button, 
-	ButtonGroup,
     FocalPointPicker,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
     __experimentalUnitControl as UnitControl,
     __experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
@@ -73,24 +73,30 @@ export default function MediaPanel({props}) {
                 >
                     <BaseControl __nextHasNoMarginBottom 
                         label={ __("Alignment", "tzm-responsive-block-controls") }
+                        className="responsive-controls__image-align"
                     >
-                        <ButtonGroup>
-                            <Button __next40pxDefaultSize icon="align-left" 
+                        <ToggleGroupControl __next40pxDefaultSize __nextHasNoMarginBottom
+                            isDeselectable
+                            isBlock
+                            onChange={ (newValue) => setImageAlign(newValue) }
+                            value={ responsiveControls?.[device]?.imageAlign }
+                        >
+                            <ToggleGroupControlOptionIcon 
+                                icon="align-left" 
                                 label={ __("Align left", "tzm-responsive-block-controls") }
-                                isPressed={ responsiveControls?.[device]?.imageAlign == 'left' }
-                                onClick={ () => setImageAlign(responsiveControls?.[device]?.imageAlign == 'left' ? undefined : 'left') }
+                                value={ "left" }
                             />
-                            <Button __next40pxDefaultSize icon="align-center" 
+                            <ToggleGroupControlOptionIcon
+                                icon="align-center" 
                                 label={ __("Align centered", "tzm-responsive-block-controls") }
-                                isPressed={ responsiveControls?.[device]?.imageAlign == 'center' }
-                                onClick={ () => setImageAlign(responsiveControls?.[device]?.imageAlign == 'center' ? undefined : 'center') }
+                                value={ "center" }
                             />
-                            <Button __next40pxDefaultSize icon="align-right" 
+                            <ToggleGroupControlOptionIcon
+                                icon="align-right" 
                                 label={ __("Align right", "tzm-responsive-block-controls") }
-                                isPressed={ responsiveControls?.[device]?.imageAlign == 'right' }
-                                onClick={ () => setImageAlign(responsiveControls?.[device]?.imageAlign == 'right' ? undefined : 'right') }
+                                value={ "right" }
                             />
-                        </ButtonGroup>
+                        </ToggleGroupControl>
                     </BaseControl>
                 </ToolsPanelItem>
             ) }
