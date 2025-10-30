@@ -83,4 +83,10 @@ body {
     #responsive-block-gap-control .components-h-stack > span:first-child {
         display: none;
     }
+
+    .responsive-controls__width .components-toggle-group-control,
+    .responsive-controls__justify .components-toggle-group-control,
+    .responsive-controls__image-align .components-toggle-group-control {
+        border-color: #666;
+    }
 }

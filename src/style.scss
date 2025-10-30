@@ -49,13 +49,17 @@ $device: "_DEVICE_";
     .wp-block-navigation > .block-editor-block-list__layout > & {
         box-sizing: border-box;
         flex-basis: calc(
-            (1% * var(--tzm-responsive--width--#{$device})) -
-                var(--tzm-responsive--block-gap--#{$device}, var(--wp--style--block-gap, 0.5em)) *
+            (1% * var(--tzm-responsive--width--#{$device})) - var(
+                    --tzm-responsive--block-gap--#{$device},
+                    var(--wp--style--block-gap, 0.5em)
+                ) *
                 (1 - var(--tzm-responsive--width--#{$device}) / 100)
         ) !important;
         width: calc(
-            (1% * var(--tzm-responsive--width--#{$device})) -
-                var(--tzm-responsive--block-gap--#{$device}, var(--wp--style--block-gap, 0.5em)) *
+            (1% * var(--tzm-responsive--width--#{$device})) - var(
+                    --tzm-responsive--block-gap--#{$device},
+                    var(--wp--style--block-gap, 0.5em)
+                ) *
                 (1 - var(--tzm-responsive--width--#{$device}) / 100)
         );
     }
@@ -85,9 +89,9 @@ $device: "_DEVICE_";
     &.is-layout-flex:not(.is-vertical):not(.wp-block-navigation) {
         flex-direction: row-reverse !important;
 
-        &:has(.tzm-responsive__full-width__#{$device}) {
+        /*&:has(.tzm-responsive__full-width__#{$device}) {
             flex-direction: column-reverse !important;
-        }
+        }*/
     }
     &.is-layout-flex.is-vertical:not(.wp-block-navigation) {
         flex-direction: column-reverse !important;

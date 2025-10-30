@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			1.2.0
+ * Version:			1.2.1
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later
@@ -13,22 +13,56 @@
  * Requires at least: 6.4
  */
 
+namespace TZM\ResponsiveBlockControls;
+
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
     exit;
 }
 
-// Check if class exists
+// Check if class already exists.
 if (!class_exists('TZM_Responsive_Block_Controls')) {
 
     class TZM_Responsive_Block_Controls
     {
-
-        // The instance of this class
+        /**
+         * Instance of this class
+         *
+         * @var self|null
+         */
         private static $instance = null;
 
-        // Returns the instance of this class.
-        public static function get_instance()
+        /**
+         * Plugin directory path
+         *
+         * @var string
+         */
+        private $plugin_path;
+
+        /**
+         * Plugin directory URL
+         *
+         * @var string
+         */
+        private $plugin_url;
+
+        /**
+         * Constructor
+         */
+        private function __construct()
+        {
+            $this->plugin_path = plugin_dir_path(__FILE__);
+            $this->plugin_url = plugins_url('', __FILE__);
+
+            $this->init_hooks();
+        }
+
+        /**
+         * Get singleton instance
+         *
+         * @return self
+         */
+        public static function get_instance(): self
         {
             if (null === self::$instance) {
                 self::$instance = new self();
@@ -36,12 +70,13 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             return self::$instance;
         }
 
-        public function __construct()
+        /**
+         * Initialize WordPress hooks
+         *
+         * @return void
+         */
+        private function init_hooks(): void
         {
-
-            // Load plugin textdomain
-            add_action('init', array($this, 'load_textdomain'));
-
             // Render block
             add_filter('render_block', array($this, 'render_block'), 10, 2);
 
@@ -55,18 +90,6 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             add_action('wp_loaded', array($this, 'add_attribute_to_blocks'), 100);
         }
 
-        /**
-         * Load plugin textdomain
-         */
-        public function load_textdomain()
-        {
-            load_plugin_textdomain(
-                'tzm-responsive-block-controls',
-                false,
-                dirname(plugin_basename(__FILE__)) . '/languages/'
-            );
-        }
-
 
         /**
          * Add the `responsiveControls` attribute to all server-side registered blocks.
@@ -75,7 +98,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
          */
         public function add_attribute_to_blocks()
         {
-            $registered_blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
+            $registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
 
             foreach ($registered_blocks as $name => $block) {
                 $block->attributes['responsiveControls'] = array(
@@ -98,7 +121,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
                 'phone'     => '781px',
                 'tablet'    => '1024px',
                 'laptop'    => '1366px',
-                'desktop'   => '1680px', // for now this value is will be ignored
+                'desktop'   => '1680px', // note that this actual value will be ignored
                 'mobile'    => '1024px'   // wp block related mobile breakpoint
             );
 
@@ -110,7 +133,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
 
             // Get source CSS stylesheet
             $css = file_get_contents(plugin_dir_path(__FILE__) . 'build/style-tzm-responsive-block-controls.css');
-            $mobile_css = '.tzm-responsive__reverse___DEVICE_.is-layout-flex:not(.wp-block-group):not(.wp-block-navigation):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important; }';
+            $mobile_css = '.tzm-responsive__reverse___DEVICE_.is-layout-flex:not(.wp-block-group):not(.wp-block-navigation):not(.is-not-stacked-on-mobile) { flex-direction: column-reverse !important }';
 
             // Generate responsive CSS stylesheet
             $output_css = '';
@@ -121,23 +144,25 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
 
                 // Insert the current device's media query
                 switch ($device) {
-                    case 'mobile':
-                        $output_css .= '@media screen and (max-width: ' . $breakpoints['mobile'] . ') {';
-                        $output_css .= str_replace($placeholder, 'phone', $mobile_css);
-                        $output_css .= str_replace($placeholder, 'tablet', $mobile_css); // To-Do: Maybe check if tablet breakpoint is same as mobile breakpoint?
-                        break;
-                    case 'phone':
-                        $output_css .= '@media screen and (max-width: ' . $breakpoints['phone'] . ') {';
-                        break;
-                    case 'tablet':
-                        $output_css .= '@media screen and (min-width: calc(' . $breakpoints['phone'] . ' + 1px)) and (max-width: ' . $breakpoints['tablet'] . ') {';
+                    case 'desktop':
+                        $output_css .= '@media screen and (min-width: ' . $breakpoints['laptop'] . ') {';
                         break;
                     case 'laptop':
                         $output_css .= '@media screen and (min-width: calc(' . $breakpoints['tablet'] . ' + 1px)) and (max-width: ' . $breakpoints['laptop'] . ') {';
                         break;
-                    case 'desktop':
-                        $output_css .= '@media screen and (min-width: calc(' . $breakpoints['laptop'] . ' + 1px)) {';
+                    case 'tablet':
+                        $output_css .= '@media screen and (min-width: calc(' . $breakpoints['phone'] . ' + 1px)) and (max-width: ' . $breakpoints['tablet'] . ') {';
                         break;
+                    case 'phone':
+                        $output_css .= '@media screen and (max-width: ' . $breakpoints['phone'] . ') {';
+                        break;
+
+                    case 'mobile': // Used to override WordPress' default responsive styles
+                        $output_css .= '@media screen and (max-width: ' . $breakpoints['mobile'] . ') {';
+                        $output_css .= str_replace($placeholder, 'phone', $mobile_css);
+                        $output_css .= str_replace($placeholder, 'tablet', $mobile_css); // To-Do: Maybe check if tablet breakpoint is same as mobile breakpoint?
+                        break;
+
                     default:
                         $output_css .= ''; // Fallback if device doesn't match
                 }
@@ -158,17 +183,17 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
          */
         public function enqueue_editor_assets()
         {
-            $editor_assets = include(plugin_dir_path(__FILE__) . 'build/tzm-responsive-block-controls.asset.php');
+            $editor_assets = include($this->plugin_path . 'build/tzm-responsive-block-controls.asset.php');
 
             wp_enqueue_style(
                 'tzm-responsive-block-controls-editor',
-                plugins_url('/build/tzm-responsive-block-controls.css', __FILE__),
+                $this->plugin_url . '/build/tzm-responsive-block-controls.css',
                 array('wp-editor'),
                 $editor_assets['version']
             );
             wp_enqueue_script(
                 'tzm-responsive-block-controls-editor',
-                plugins_url('/build/tzm-responsive-block-controls.js', __FILE__),
+                $this->plugin_url . '/build/tzm-responsive-block-controls.js',
                 $editor_assets['dependencies'],
                 $editor_assets['version'],
                 array('in_footer' => true)
@@ -190,7 +215,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
          */
         public function enqueue_block_assets()
         {
-            $frontend_assets = include(plugin_dir_path(__FILE__) . 'build/tzm-responsive-block-controls.asset.php');
+            $frontend_assets = include($this->plugin_path . 'build/tzm-responsive-block-controls.asset.php');
 
             // Get the dynamically generated CSS
             $css = $this->get_responsive_block_styles();
@@ -198,7 +223,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             // Register and enqueue responsive inline styles
             wp_register_style(
                 'tzm-responsive-block-controls',
-                false,
+                false, // source url is false since we're adding inline styles
                 is_admin() ? array('wp-editor') : array(),
                 $frontend_assets['version']
             );
@@ -287,7 +312,7 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             $classes = implode(' ', $classes);
             $styles = implode(';', $styles);
 
-            $html = new WP_HTML_Tag_Processor($block_content);
+            $html = new \WP_HTML_Tag_Processor($block_content);
             $html->next_tag();
 
             if ($classes) {

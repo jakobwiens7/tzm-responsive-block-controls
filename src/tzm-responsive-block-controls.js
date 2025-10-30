@@ -106,7 +106,7 @@ const withResponsiveControls = createHigherOrderComponent( (BlockEdit) => {
 			attributes,
 			setAttributes,
 			clientId,
-			isSelected,
+			//isSelected,
 			context: { postId, postType },
 		} = props;
 		
@@ -350,7 +350,8 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 		
 		const {
 			attributes,
-			className
+			className,
+			isSelected
 		} = props;
 		
 		const {
@@ -441,7 +442,7 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 							if (value) styles[`--tzm-responsive--${kebabCase(option)}--${device}`] = value;
 							break;
 
-						case 'width':
+						case 'width':							
 							if (value !== 100) styles[`--tzm-responsive--width--${device}`] = value;
 							break;
 					}
@@ -450,10 +451,15 @@ const addResponsiveStylingEditor = createHigherOrderComponent( (BlockListBlock) 
 			return styles;
 		}, {});
 
+		const mergedWrapperProps = { 
+			...props.wrapperProps, 
+			style: { ...props.wrapperProps?.style, ...responsiveStyles } 
+		}
+
 		return (
 			<BlockListBlock	{ ...props } 
 				className={ clsx(className, responsiveClasses) }
-				wrapperProps={ { ...props.wrapperProps, style: responsiveStyles } }
+				wrapperProps={ mergedWrapperProps }
 			/>
 		);
 	
