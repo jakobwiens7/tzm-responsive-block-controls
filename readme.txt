@@ -108,6 +108,9 @@ However, your content will remain intact, and the blocks will revert to their de
 
 == Changelog ==
 
+= 1.2.2 =
+- Fixed "Reverse order" CSS regression
+
 = 1.2.1 =
 - Replaced deprecated components
 - Minor bugfixes & improvements

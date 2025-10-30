@@ -3,7 +3,7 @@
 /**
  * Plugin Name:		TZM Responsive Block Controls
  * Description:		Control your block's appearance depending on a device's screen width.
- * Version:			1.2.1
+ * Version:			1.2.2
  * Author:			TezmoMedia - Jakob Wiens
  * Author URI:		https://www.tezmo.media
  * License:			GPL-2.0-or-later

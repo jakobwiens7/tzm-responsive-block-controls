@@ -54,6 +54,10 @@ add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block
 
 ## Changelog
 
+#### 1.2.2
+
+- Fixed "Reverse order" CSS regression
+
 #### 1.2.1
 
 - Replaced deprecated components
