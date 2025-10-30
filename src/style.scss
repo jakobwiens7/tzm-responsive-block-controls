@@ -89,16 +89,16 @@ $device: "_DEVICE_";
     &.is-layout-flex:not(.is-vertical):not(.wp-block-navigation) {
         flex-direction: row-reverse !important;
 
-        /*&:has(.tzm-responsive__full-width__#{$device}) {
+        &:has(.tzm-responsive__full-width__#{$device}) {
             flex-direction: column-reverse !important;
-        }*/
+        }
     }
     &.is-layout-flex.is-vertical:not(.wp-block-navigation) {
         flex-direction: column-reverse !important;
 
-        /*&:has([style*="--tzm-responsive--width--#{$device}"]) {
+        &:has([style*="--tzm-responsive--width--#{$device}"]) {
             flex-direction: row-reverse !important;
-        }*/
+        }
     }
 
     // Navigation block
