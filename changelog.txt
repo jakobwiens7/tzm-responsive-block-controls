@@ -1,3 +1,7 @@
+= 1.2.1 =
+- Replaced deprecated components
+- Minor bugfixes & improvements
+
 == 1.2.0 ==
 - Fixed "Display hidden blocks" when content is not iframed
 

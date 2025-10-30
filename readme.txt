@@ -1,8 +1,8 @@
 === TZM Responsive Block Controls ===
 Contributors: 		jakobwiens
 Tags:				responsivity, responsive, block controls, mobile, customization
-Tested up to: 		6.7
-Stable tag: 		1.2.0
+Tested up to: 		6.8
+Stable tag: 		1.2.1
 License:			GPLv2 or later
 License URI: 		https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,10 @@ However, your content will remain intact, and the blocks will revert to their de
 
 
 == Changelog ==
+
+= 1.2.1 =
+- Replaced deprecated components
+- Minor bugfixes & improvements
 
 = 1.2.0 =
 - Fixed "Display hidden blocks" when content is not iframed

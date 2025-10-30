@@ -54,6 +54,19 @@ add_filter('tzm_responsive_block_controls_output_css', 'enqueue_responsive_block
 
 ## Changelog
 
+#### 1.2.1
+
+- Replaced deprecated components
+- Minor bugfixes & improvements
+
+#### 1.2.0
+
+- Fixed "Display hidden blocks" when content is not iframed
+
+#### 1.1.5
+
+- Bugfixes & optimization
+
 #### 1.1.4
 
 - Added responsive "Border-Radius" support
