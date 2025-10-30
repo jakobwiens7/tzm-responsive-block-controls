@@ -1,15 +1,15 @@
-# Copyright (C) 2024 TezmoMedia - Jakob Wiens
+# Copyright (C) 2025 TezmoMedia - Jakob Wiens
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: TZM Responsive Block Controls 1.1.1\n"
+"Project-Id-Version: TZM Responsive Block Controls 1.2.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/tzm-responsive-block-controls\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-11-27T13:28:34+01:00\n"
+"POT-Creation-Date: 2025-10-30T10:44:16+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: tzm-responsive-block-controls\n"
@@ -35,144 +35,177 @@ msgid "https://www.tezmo.media"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:62
+#: src/general-panel.js:60
+#: build/tzm-responsive-block-controls.js:605
 msgid "Hide block"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:71
+#: src/general-panel.js:69
+#: build/tzm-responsive-block-controls.js:614
 msgid "Reverse order"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:81
+#: src/general-panel.js:72
+#: build/tzm-responsive-block-controls.js:617
+msgid "Warning: \"Stack on mobile\" is currently enabled and may conflict with this setting."
+msgstr ""
+
+#: build/tzm-responsive-block-controls.js:1
+#: src/general-panel.js:80
+#: build/tzm-responsive-block-controls.js:625
 msgid "Block width"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:87
-#: src/general-panel.js:90
+#: src/general-panel.js:89
+#: build/tzm-responsive-block-controls.js:634
 msgid "50%"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:93
-#: src/general-panel.js:96
+#: src/general-panel.js:90
+#: build/tzm-responsive-block-controls.js:635
 msgid "66%"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:99
-#: src/general-panel.js:102
+#: src/general-panel.js:91
+#: build/tzm-responsive-block-controls.js:636
 msgid "75%"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:105
-#: src/general-panel.js:108
+#: src/general-panel.js:92
+#: build/tzm-responsive-block-controls.js:637
 msgid "100%"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:117
+#: src/general-panel.js:101
+#: build/tzm-responsive-block-controls.js:646
 msgid "Block justification"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:122
+#: src/general-panel.js:113
+#: build/tzm-responsive-block-controls.js:658
 msgid "Justify left"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:127
+#: src/general-panel.js:118
+#: build/tzm-responsive-block-controls.js:663
 msgid "Justify center"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:132
+#: src/general-panel.js:123
+#: build/tzm-responsive-block-controls.js:668
 msgid "Justify right"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/general-panel.js:137
+#: src/general-panel.js:128
+#: build/tzm-responsive-block-controls.js:673
 msgid "Space between blocks"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
 #: src/media-panel.js:66
+#: build/tzm-responsive-block-controls.js:748
 msgid "Media"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
 #: src/media-panel.js:70
 #: src/media-panel.js:75
+#: build/tzm-responsive-block-controls.js:752
+#: build/tzm-responsive-block-controls.js:757
 msgid "Alignment"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/media-panel.js:79
+#: src/media-panel.js:86
+#: build/tzm-responsive-block-controls.js:768
 msgid "Align left"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/media-panel.js:84
+#: src/media-panel.js:91
+#: build/tzm-responsive-block-controls.js:773
 msgid "Align centered"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/media-panel.js:89
+#: src/media-panel.js:96
+#: build/tzm-responsive-block-controls.js:778
 msgid "Align right"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/media-panel.js:100
-#: src/media-panel.js:105
+#: src/media-panel.js:106
+#: src/media-panel.js:111
+#: build/tzm-responsive-block-controls.js:788
+#: build/tzm-responsive-block-controls.js:793
 msgid "Width"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/media-panel.js:116
-#: src/media-panel.js:121
+#: src/media-panel.js:122
+#: src/media-panel.js:127
+#: build/tzm-responsive-block-controls.js:804
+#: build/tzm-responsive-block-controls.js:809
 msgid "Focal point"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
 #: src/typography-panel.js:48
-#: src/typography-panel.js:52
+#: src/typography-panel.js:54
+#: build/tzm-responsive-block-controls.js:869
+#: build/tzm-responsive-block-controls.js:875
 msgid "Text alignment"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/typography-panel.js:70
+#: src/typography-panel.js:80
+#: build/tzm-responsive-block-controls.js:901
 msgid "Align text justify"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:277
+#: src/tzm-responsive-block-controls.js:294
+#: build/tzm-responsive-block-controls.js:1219
 msgid "Responsive controls"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:289
+#: src/tzm-responsive-block-controls.js:306
+#: build/tzm-responsive-block-controls.js:1231
 msgid "Phone"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:296
+#: src/tzm-responsive-block-controls.js:313
+#: build/tzm-responsive-block-controls.js:1238
 msgid "Tablet"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:303
+#: src/tzm-responsive-block-controls.js:320
+#: build/tzm-responsive-block-controls.js:1245
 msgid "Laptop"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:310
+#: src/tzm-responsive-block-controls.js:327
+#: build/tzm-responsive-block-controls.js:1252
 msgid "Desktop"
 msgstr ""
 
 #: build/tzm-responsive-block-controls.js:1
-#: src/tzm-responsive-block-controls.js:486
+#: src/tzm-responsive-block-controls.js:492
+#: build/tzm-responsive-block-controls.js:1417
 msgid "Display hidden blocks"
 msgstr ""
