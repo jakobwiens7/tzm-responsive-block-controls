@@ -129,7 +129,10 @@ if (!class_exists('TZM_Responsive_Block_Controls')) {
             $breakpoints = apply_filters('tzm_responsive_block_controls_breakpoints', $default_breakpoints);
 
             // Merge provided breakpoints with defaults and restrict to only default keys
-            $breakpoints = array_intersect_key(array_merge($default_breakpoints, $breakpoints));
+            $breakpoints = array_intersect_key(
+                array_merge($default_breakpoints, $breakpoints),
+                $default_breakpoints
+            );
 
             // Get source CSS stylesheet
             $css = file_get_contents(plugin_dir_path(__FILE__) . 'build/style-tzm-responsive-block-controls.css');
