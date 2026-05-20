@@ -109,8 +109,9 @@ However, your content will remain intact, and the blocks will revert to their de
 == Changelog ==
 
 = 1.2.2 =
+- Support WordPress 7.0
 - Fixed PHP warning (Thanks @draic9)
-- Fixed "Reverse order" CSS regression
+- Fixed 'Reverse order' CSS regression
 
 = 1.2.1 =
 - Replaced deprecated components
